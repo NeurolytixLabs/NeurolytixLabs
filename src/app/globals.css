@@ -1,0 +1,355 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+    --color-background: #09090b;
+    --color-foreground: #fafafa;
+    --color-card: #0a0a0f;
+    --color-card-foreground: #fafafa;
+    --color-popover: #09090b;
+    --color-popover-foreground: #fafafa;
+    --color-primary: #6d3bff;
+    --color-primary-foreground: #ffffff;
+    --color-secondary: #1a1a2e;
+    --color-secondary-foreground: #fafafa;
+    --color-muted: #18181b;
+    --color-muted-foreground: #a1a1aa;
+    --color-accent: #6d3bff;
+    --color-accent-foreground: #fafafa;
+    --color-destructive: #ef4444;
+    --color-destructive-foreground: #fafafa;
+    --color-border: #27272a;
+    --color-input: #27272a;
+    --color-ring: #6d3bff;
+    --color-surface: #111116;
+    --color-surface-light: #1a1a22;
+    --color-purple-glow: #6d3bff33;
+    --radius-lg: 0.75rem;
+    --radius-md: 0.5rem;
+    --radius-sm: 0.25rem;
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ─────────────────────── Reset & Base ─────────────────────── */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    border-color: var(--color-border);
+}
+
+html {
+    /* Remove native smooth-scroll so Lenis handles all scrolling */
+    scroll-behavior: auto;
+}
+
+/* ─────────────────────── Lenis Overrides ─────────────────────── */
+
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+    pointer-events: none;
+}
+
+/* ─────────────────────── Body ─────────────────────── */
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overscroll-behavior: none;
+}
+
+/* ─────────────────────── Scrollbar styling ─────────────────────── */
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-muted-foreground);
+}
+
+/* ─────────────────── GPU Acceleration Hints ─────────────────── */
+
+section,
+nav,
+footer,
+header,
+[data-scroll-section] {
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+img,
+svg,
+video {
+    transform: translateZ(0);
+}
+
+/* ─────────────────────── Marquee Animations ─────────────────────── */
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0) translateZ(0);
+    }
+    100% {
+        transform: translateX(-50%) translateZ(0);
+    }
+}
+
+@keyframes marquee-reverse {
+    0% {
+        transform: translateX(-50%) translateZ(0);
+    }
+    100% {
+        transform: translateX(0) translateZ(0);
+    }
+}
+
+.animate-marquee {
+    animation: marquee 30s linear infinite;
+    will-change: transform;
+}
+
+.animate-marquee-reverse {
+    animation: marquee-reverse 30s linear infinite;
+    will-change: transform;
+}
+
+/* ─────────────────── Fade-In-Up (initial load only) ─────────────────── */
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(24px) translateZ(0);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) translateZ(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fade-in-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ─────────────────────── Pulse Glow ─────────────────────── */
+
+@keyframes pulse-glow {
+    0%,
+    100% {
+        box-shadow: 0 0 20px 0 var(--color-purple-glow);
+    }
+    50% {
+        box-shadow: 0 0 40px 8px var(--color-purple-glow);
+    }
+}
+
+.animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* ─────────────────────── Typing Cursor Blink ─────────────────────── */
+
+@keyframes blink {
+    0%,
+    50% {
+        opacity: 1;
+    }
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
+.animate-blink {
+    animation: blink 1s step-end infinite;
+}
+
+/* ─────────────────── Floating / Bobbing Animation ─────────────────── */
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0px) translateZ(0);
+    }
+    50% {
+        transform: translateY(-14px) translateZ(0);
+    }
+}
+
+.animate-float {
+    animation: float 4.5s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+
+/* ──────────────── Gentle Parallax-ish Drift ──────────────── */
+
+@keyframes drift {
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg) translateZ(0);
+    }
+    25% {
+        transform: translate(6px, -8px) rotate(1deg) translateZ(0);
+    }
+    50% {
+        transform: translate(-4px, -14px) rotate(-0.5deg) translateZ(0);
+    }
+    75% {
+        transform: translate(-8px, -4px) rotate(0.5deg) translateZ(0);
+    }
+}
+
+.animate-drift {
+    animation: drift 8s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+
+/* ─────────────────────── Gradient Text ─────────────────────── */
+
+.text-gradient {
+    background: linear-gradient(135deg, #ffffff 0%, #6d3bff 50%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ─────────────────────── Glass Card ─────────────────────── */
+
+.glass-card {
+    background: linear-gradient(
+        135deg,
+        rgba(109, 59, 255, 0.06) 0%,
+        rgba(10, 10, 15, 0.8) 100%
+    );
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(109, 59, 255, 0.12);
+}
+
+/* ─────────────────────── Glow Border ─────────────────────── */
+
+.glow-border {
+    position: relative;
+}
+
+.glow-border::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+        135deg,
+        rgba(109, 59, 255, 0.3),
+        transparent 50%,
+        rgba(109, 59, 255, 0.1)
+    );
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+}
+
+.glow-border:hover::before {
+    opacity: 1;
+}
+
+/* ────────────────── Section Gradient Overlay ────────────────── */
+
+.section-gradient {
+    background: radial-gradient(
+        ellipse 80% 50% at 50% -20%,
+        rgba(109, 59, 255, 0.08) 0%,
+        transparent 70%
+    );
+}
+
+/* ────────────────── Hide Scrollbar Utility ────────────────── */
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* ──────────── Smooth Transition Defaults for Interactives ──────────── */
+
+a,
+button,
+[role="button"],
+input,
+select,
+textarea {
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ──────── Reduced Motion: Respect user preference ──────── */
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .animate-marquee,
+    .animate-marquee-reverse,
+    .animate-fade-in-up,
+    .animate-pulse-glow,
+    .animate-blink,
+    .animate-float,
+    .animate-drift {
+        animation: none !important;
+    }
+
+    section,
+    nav,
+    footer,
+    header,
+    [data-scroll-section] {
+        will-change: auto;
+    }
+}
