@@ -14,7 +14,7 @@ const GlowingCTAButton = React.forwardRef<
       ref={ref}
       className={cn(
         // Base layout & shape
-        "group relative h-12 min-w-[16rem] rounded-full border border-[#27272a] bg-[#0f0f14] px-8 text-left text-base font-bold text-gray-50 overflow-hidden cursor-pointer",
+        "group relative h-12 min-w-[16rem] rounded-full border border-[#27272a] bg-[#0f0f14] px-8 text-center text-base font-bold text-gray-50 overflow-hidden cursor-pointer",
         // Transition durations
         "duration-500",
         // Hover border glow

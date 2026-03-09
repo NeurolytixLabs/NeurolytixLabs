@@ -308,6 +308,273 @@ video {
     scrollbar-width: none;
 }
 
+/* ─────────────────────── Orbit Button ─────────────────────── */
+
+.orbit-btn {
+    --duration: 7s;
+    --easing: linear;
+    --c-color-1: rgba(88, 48, 196, 0.75);
+    --c-color-2: rgba(55, 20, 160, 0.8);
+    --c-color-3: rgba(72, 34, 180, 0.7);
+    --c-color-4: rgba(109, 59, 255, 0.5);
+    --c-shadow: rgba(55, 20, 160, 0.45);
+    --c-shadow-inset-top: rgba(72, 34, 180, 0.8);
+    --c-shadow-inset-bottom: rgba(38, 12, 120, 0.6);
+    --c-radial-inner: #0d0d1a;
+    --c-radial-outer: #3a1a8e;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+    outline: none;
+    display: table;
+    background: radial-gradient(
+        circle,
+        var(--c-radial-inner),
+        var(--c-radial-outer) 80%
+    );
+    box-shadow: 0 0 14px var(--c-shadow);
+}
+
+.orbit-btn::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 9999px;
+    box-shadow:
+        inset 0 3px 12px var(--c-shadow-inset-top),
+        inset 0 -3px 4px var(--c-shadow-inset-bottom);
+}
+
+.orbit-btn-wrapper {
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    overflow: hidden;
+    border-radius: 9999px;
+    min-width: 16rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2rem;
+}
+
+.orbit-btn:hover {
+    --duration: 1400ms;
+}
+
+.orbit-circle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    filter: blur(var(--blur, 8px));
+    background: var(--background, transparent);
+    transform: translate(var(--x, 0), var(--y, 0)) translateZ(0);
+    animation: var(--animation, none) var(--duration) var(--easing) infinite;
+}
+
+.orbit-circle-1,
+.orbit-circle-9,
+.orbit-circle-10 {
+    --background: var(--c-color-4);
+}
+
+.orbit-circle-3,
+.orbit-circle-4 {
+    --background: var(--c-color-2);
+    --blur: 14px;
+}
+
+.orbit-circle-5,
+.orbit-circle-6 {
+    --background: var(--c-color-3);
+    --blur: 16px;
+}
+
+.orbit-circle-2,
+.orbit-circle-7,
+.orbit-circle-8,
+.orbit-circle-11,
+.orbit-circle-12 {
+    --background: var(--c-color-1);
+    --blur: 12px;
+}
+
+.orbit-circle-1 {
+    --x: 0;
+    --y: -40px;
+    --animation: orbit-1;
+}
+.orbit-circle-2 {
+    --x: 92px;
+    --y: 8px;
+    --animation: orbit-2;
+}
+.orbit-circle-3 {
+    --x: -12px;
+    --y: -12px;
+    --animation: orbit-3;
+}
+.orbit-circle-4 {
+    --x: 80px;
+    --y: -12px;
+    --animation: orbit-4;
+}
+.orbit-circle-5 {
+    --x: 12px;
+    --y: -4px;
+    --animation: orbit-5;
+}
+.orbit-circle-6 {
+    --x: 56px;
+    --y: 16px;
+    --animation: orbit-6;
+}
+.orbit-circle-7 {
+    --x: 8px;
+    --y: 28px;
+    --animation: orbit-7;
+}
+.orbit-circle-8 {
+    --x: 28px;
+    --y: -4px;
+    --animation: orbit-8;
+}
+.orbit-circle-9 {
+    --x: 20px;
+    --y: -12px;
+    --animation: orbit-9;
+}
+.orbit-circle-10 {
+    --x: 64px;
+    --y: 16px;
+    --animation: orbit-10;
+}
+.orbit-circle-11 {
+    --x: 4px;
+    --y: 4px;
+    --animation: orbit-11;
+}
+.orbit-circle-12 {
+    --blur: 14px;
+    --x: 52px;
+    --y: 4px;
+    --animation: orbit-12;
+}
+
+@keyframes orbit-1 {
+    33% {
+        transform: translate(0px, 16px) translateZ(0);
+    }
+    66% {
+        transform: translate(12px, 64px) translateZ(0);
+    }
+}
+
+@keyframes orbit-2 {
+    33% {
+        transform: translate(80px, -10px) translateZ(0);
+    }
+    66% {
+        transform: translate(72px, -48px) translateZ(0);
+    }
+}
+
+@keyframes orbit-3 {
+    33% {
+        transform: translate(20px, 12px) translateZ(0);
+    }
+    66% {
+        transform: translate(12px, 4px) translateZ(0);
+    }
+}
+
+@keyframes orbit-4 {
+    33% {
+        transform: translate(76px, -12px) translateZ(0);
+    }
+    66% {
+        transform: translate(112px, -8px) translateZ(0);
+    }
+}
+
+@keyframes orbit-5 {
+    33% {
+        transform: translate(84px, 28px) translateZ(0);
+    }
+    66% {
+        transform: translate(40px, -32px) translateZ(0);
+    }
+}
+
+@keyframes orbit-6 {
+    33% {
+        transform: translate(28px, -16px) translateZ(0);
+    }
+    66% {
+        transform: translate(76px, -56px) translateZ(0);
+    }
+}
+
+@keyframes orbit-7 {
+    33% {
+        transform: translate(8px, 28px) translateZ(0);
+    }
+    66% {
+        transform: translate(20px, -60px) translateZ(0);
+    }
+}
+
+@keyframes orbit-8 {
+    33% {
+        transform: translate(32px, -4px) translateZ(0);
+    }
+    66% {
+        transform: translate(56px, -20px) translateZ(0);
+    }
+}
+
+@keyframes orbit-9 {
+    33% {
+        transform: translate(20px, -12px) translateZ(0);
+    }
+    66% {
+        transform: translate(80px, -8px) translateZ(0);
+    }
+}
+
+@keyframes orbit-10 {
+    33% {
+        transform: translate(68px, 20px) translateZ(0);
+    }
+    66% {
+        transform: translate(100px, 28px) translateZ(0);
+    }
+}
+
+@keyframes orbit-11 {
+    33% {
+        transform: translate(4px, 4px) translateZ(0);
+    }
+    66% {
+        transform: translate(68px, 20px) translateZ(0);
+    }
+}
+
+@keyframes orbit-12 {
+    33% {
+        transform: translate(56px, 0px) translateZ(0);
+    }
+    66% {
+        transform: translate(60px, -32px) translateZ(0);
+    }
+}
+
 /* ──────────── Smooth Transition Defaults for Interactives ──────────── */
 
 a,
@@ -341,7 +608,8 @@ textarea {
     .animate-pulse-glow,
     .animate-blink,
     .animate-float,
-    .animate-drift {
+    .animate-drift,
+    .orbit-circle {
         animation: none !important;
     }
 

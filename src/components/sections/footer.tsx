@@ -273,13 +273,13 @@ export function Footer() {
                   <Zap className="w-4.5 h-4.5 text-primary" />
                 </div>
                 <span className="text-xl font-bold tracking-tight text-foreground">
-                  XTRACT
+                  NEUROLYTIX
                 </span>
               </a>
 
               {/* Tagline */}
               <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-                Xtract – Automate Smarter, Optimize Faster, and Grow Stronger.
+                NEUROLYTIX – Automate Smarter, Optimize Faster, and Grow Stronger.
               </p>
 
               {/* Newsletter */}
@@ -324,12 +324,11 @@ export function Footer() {
               <span className="hidden sm:inline text-muted-foreground/30">
                 ·
               </span>
-              <span>Logo by flaticon</span>
             </div>
 
             {/* Center — Copyright */}
             <p className="text-xs text-muted-foreground/60 text-center">
-              © {new Date().getFullYear()} Xtract. All rights reserved.
+              © {new Date().getFullYear()} NEUROLYTIX. All rights reserved.
             </p>
 
             {/* Right — Mobile back to top */}
