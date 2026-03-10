@@ -181,6 +181,22 @@ video {
     animation: pulse-glow 3s ease-in-out infinite;
 }
 
+/* ─────────────── Subtle Pulse Glow (Services active step) ─────────────── */
+
+@keyframes pulse-glow-subtle {
+    0%,
+    100% {
+        box-shadow: 0 0 8px 0 rgba(109, 59, 255, 0.1);
+    }
+    50% {
+        box-shadow: 0 0 18px 2px rgba(109, 59, 255, 0.18);
+    }
+}
+
+.animate-pulse-glow-subtle {
+    animation: pulse-glow-subtle 2.5s ease-in-out infinite;
+}
+
 /* ─────────────────────── Typing Cursor Blink ─────────────────────── */
 
 @keyframes blink {

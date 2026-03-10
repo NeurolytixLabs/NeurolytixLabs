@@ -5,314 +5,446 @@ import { cn } from "@/lib/utils";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Badge } from "@/components/ui/badge";
 import {
-  Bot,
-  Workflow,
-  Megaphone,
-  FolderCog,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  AlertCircle,
-  CreditCard,
-  Users,
-  FileText,
-  BarChart3,
-  Send,
-  Paperclip,
-  Image,
-  Search,
-  Sparkles,
-  Mail,
-  Linkedin,
-  Calendar,
-  MessageSquare,
+  Box,
+  Activity,
+  Radio,
+  ArrowRight,
+  Package,
+  AlertTriangle,
 } from "lucide-react";
 
-/* ─────────────────────────── Task List Mock ─────────────────────────── */
+/* ─────────────── Scroll-driven progress (0 → 100) ─────────────── */
 
-interface TaskItem {
-  title: string;
-  subtitle: string;
-  icon: React.ReactNode;
-  statusColor: string;
+const ScrollProgressContext = React.createContext(0);
+
+function useScrollProgress(ref: React.RefObject<HTMLElement | null>) {
+  const [progress, setProgress] = React.useState(0);
+
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    function onScroll() {
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const viewH = window.innerHeight;
+      const total = rect.height + viewH;
+      const scrolled = viewH - rect.top;
+      const raw = Math.min(Math.max(scrolled / total, 0), 1);
+      setProgress(Math.round(raw * 100));
+    }
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [ref]);
+
+  return progress;
 }
 
-const tasks: TaskItem[] = [
-  {
-    title: "Payroll management",
-    subtitle: "Due on 2nd july",
-    icon: <CreditCard className="w-4 h-4 text-blue-400" />,
-    statusColor: "bg-blue-400",
-  },
-  {
-    title: "Employee Tracking",
-    subtitle: "2 days ago",
-    icon: <Users className="w-4 h-4 text-emerald-400" />,
-    statusColor: "bg-emerald-400",
-  },
-  {
-    title: "Social media post",
-    subtitle: "Cancelled by user",
-    icon: <XCircle className="w-4 h-4 text-red-400" />,
-    statusColor: "bg-red-400",
-  },
-  {
-    title: "Lead list",
-    subtitle: "70% prepared",
-    icon: <BarChart3 className="w-4 h-4 text-amber-400" />,
-    statusColor: "bg-amber-400",
-  },
-  {
-    title: "Payment reminder",
-    subtitle: "sent to selected clients",
-    icon: <AlertCircle className="w-4 h-4 text-violet-400" />,
-    statusColor: "bg-violet-400",
-  },
+/* ─────────────── InView hook for reveal animations ─────────────── */
+
+function useInView(
+  threshold = 0.15,
+): [React.RefObject<HTMLDivElement | null>, boolean] {
+  const ref = React.useRef<HTMLDivElement | null>(null);
+  const [inView, setInView] = React.useState(false);
+
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          obs.disconnect();
+        }
+      },
+      { threshold },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+
+  return [ref, inView];
+}
+
+/* ─────────────── Animated counter hook ─────────────── */
+
+function useCountUp(
+  end: number,
+  active: boolean,
+  durationMs = 1600,
+  decimals = 0,
+): string {
+  const [value, setValue] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!active) {
+      setValue(0);
+      return;
+    }
+    let raf: number;
+    const start = performance.now();
+
+    function tick(now: number) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / durationMs, 1);
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(eased * end);
+      if (progress < 1) raf = requestAnimationFrame(tick);
+    }
+
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [active, end, durationMs]);
+
+  return value.toFixed(decimals);
+}
+
+/* ─────────────────── Pipeline Step Mock ─────────────────── */
+
+interface PipelineStep {
+  label: string;
+  status: "done" | "running" | "queued";
+}
+
+const pipelineSteps: PipelineStep[] = [
+  { label: "Source ingestion", status: "done" },
+  { label: "Schema normalization", status: "done" },
+  { label: "Null handling & validation", status: "running" },
+  { label: "Feature engineering", status: "queued" },
+  { label: "Output to model layer", status: "queued" },
 ];
 
-function TaskListMock() {
+function PipelineMock() {
+  const barPercent = React.useContext(ScrollProgressContext);
+  const [ref, inView] = useInView(0.2);
+
   return (
-    <div className="w-full max-w-[280px] mx-auto rounded-xl border border-border bg-surface p-3 shadow-lg shadow-black/20">
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-semibold text-foreground">All Tasks</span>
-        <span className="text-[10px] text-muted-foreground">
-          Waiting for approval
-        </span>
+    <div
+      ref={ref}
+      className="w-full max-w-[340px] mx-auto rounded-xl border border-border bg-surface p-4 shadow-lg shadow-black/20 flex flex-col gap-2.5"
+    >
+      {/* Header */}
+      <div
+        className={cn(
+          "text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 mb-1 transition-all duration-500",
+          inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
+        )}
+      >
+        Active Pipeline — Retail Dataset
       </div>
-      <div className="flex flex-col gap-1.5">
-        {tasks.map((task, i) => (
+
+      {/* Steps — staggered reveal */}
+      {pipelineSteps.map((step, i) => (
+        <div
+          key={i}
+          className={cn(
+            "flex items-center gap-2.5 px-3 py-2.5 rounded-[10px] border transition-all",
+            step.status === "running"
+              ? "bg-primary/10 border-primary/30 shadow-[0_0_12px_rgba(109,59,255,0.15)] animate-pulse-glow-subtle"
+              : "bg-white/[0.03] border-border/50",
+            // staggered reveal
+            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
+          )}
+          style={{
+            transitionDuration: "500ms",
+            transitionDelay: inView ? `${i * 90}ms` : "0ms",
+          }}
+        >
+          {/* Dot */}
           <div
-            key={i}
-            className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg bg-background/60 border border-border/50 hover:border-primary/20 transition-colors duration-200"
-          >
-            <div className="flex items-center justify-center w-7 h-7 rounded-md bg-muted/60 shrink-0">
-              {task.icon}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[11px] font-medium text-foreground truncate">
-                {task.title}
-              </p>
-              <p className="text-[9px] text-muted-foreground truncate">
-                {task.subtitle}
-              </p>
-            </div>
-            <div
-              className={cn("w-1.5 h-1.5 rounded-full shrink-0", task.statusColor)}
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────── AI Chat Mock ─────────────────────────── */
-
-function AIChatMock() {
-  return (
-    <div className="w-full max-w-[300px] mx-auto rounded-xl border border-border bg-surface p-3 shadow-lg shadow-black/20">
-      <div className="flex flex-col gap-3">
-        {/* Chat input area */}
-        <div className="rounded-lg border border-border bg-background/60 p-3">
-          <p className="text-[11px] text-muted-foreground mb-2">
-            What can I help with?
-          </p>
-          <p className="text-[11px] text-foreground/80 leading-relaxed">
-            Weather you want help in customer handling or make changes in your
-            system just give me command
-            <span className="inline-block w-0.5 h-3 bg-primary ml-0.5 animate-blink align-middle" />
-          </p>
-        </div>
-
-        {/* Action buttons */}
-        <div className="flex flex-wrap gap-1.5">
-          {[
-            { label: "Add document", icon: <Paperclip className="w-3 h-3" /> },
-            { label: "Analyze", icon: <Search className="w-3 h-3" /> },
-            { label: "Generate Image", icon: <Image className="w-3 h-3" /> },
-            { label: "Research", icon: <Sparkles className="w-3 h-3" /> },
-          ].map((action, i) => (
-            <div
-              key={i}
-              className="flex items-center gap-1 px-2 py-1 rounded-md bg-muted/50 border border-border/50 text-[9px] text-muted-foreground"
-            >
-              {action.icon}
-              {action.label}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ────────────────────── Outreach / Email Mock ────────────────────── */
-
-interface FounderItem {
-  name: string;
-  email: string;
-  company: string;
-}
-
-const founders: FounderItem[] = [
-  { name: "Jack Daniel", email: "justin@main.com", company: "Xavier LLC" },
-  { name: "Gorge Chapel", email: "gorge@mail.com", company: "Chapel LLC" },
-  { name: "Mike Tylor", email: "mike@Cmb.com", company: "CMB LLC" },
-  { name: "Thomas Shelby", email: "Thimas@Sby.com", company: "Shelby.co" },
-];
-
-function OutreachMock() {
-  return (
-    <div className="w-full max-w-[300px] mx-auto rounded-xl border border-border bg-surface p-3 shadow-lg shadow-black/20">
-      {/* Header bar */}
-      <div className="flex items-center gap-2 mb-3">
-        <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-primary/15 border border-primary/20">
-          <Send className="w-3 h-3 text-primary" />
-          <span className="text-[10px] font-medium text-primary">
-            E-mail Sending..
-          </span>
-        </div>
-        <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-muted/50 border border-border/50">
-          <Linkedin className="w-3 h-3 text-blue-400" />
-          <span className="text-[10px] text-muted-foreground">LinkedIn</span>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex items-center gap-1 mb-3 text-[10px] text-muted-foreground">
-        <span className="px-2 py-0.5 rounded bg-muted/50 border border-border/50">
-          IT services
-        </span>
-        <span className="px-2 py-0.5 rounded bg-primary/15 text-primary border border-primary/20">
-          Founders
-        </span>
-      </div>
-
-      {/* Founder list */}
-      <div className="flex flex-col gap-1.5 max-h-[160px] overflow-hidden">
-        {founders.map((f, i) => (
-          <div
-            key={i}
-            className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-background/60 border border-border/50"
-          >
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary/40 to-violet-500/40 flex items-center justify-center text-[9px] font-bold text-foreground shrink-0">
-              {f.name.charAt(0)}
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1">
-                <p className="text-[10px] font-medium text-foreground truncate">
-                  {f.name}
-                </p>
-                <span className="text-[8px] text-muted-foreground">Founder</span>
-                <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400 shrink-0" />
-              </div>
-              <p className="text-[8px] text-muted-foreground truncate">
-                {f.email} · {f.company}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Footer tabs */}
-      <div className="flex items-center gap-2 mt-3 text-[10px]">
-        {["Draft", "Schedule", "Sent"].map((tab, i) => (
-          <span
-            key={tab}
             className={cn(
-              "px-2 py-0.5 rounded",
-              i === 2
-                ? "bg-primary/15 text-primary border border-primary/20"
-                : "text-muted-foreground"
+              "w-[7px] h-[7px] rounded-full shrink-0",
+              step.status === "done" && "bg-emerald-400",
+              step.status === "running" && "bg-primary animate-pulse",
+              step.status === "queued" && "bg-muted-foreground/40",
+            )}
+          />
+
+          {/* Label */}
+          <span
+            className={cn(
+              "flex-1 text-xs",
+              step.status === "running"
+                ? "text-foreground font-medium"
+                : "text-muted-foreground",
             )}
           >
-            {tab}
+            {step.label}
           </span>
-        ))}
+
+          {/* Badge */}
+          <span
+            className={cn(
+              "text-[10px] font-medium px-2 py-0.5 rounded-full",
+              step.status === "done" && "bg-emerald-400/10 text-emerald-400",
+              step.status === "running" && "bg-primary/15 text-primary",
+              step.status === "queued" &&
+                "bg-white/[0.04] text-muted-foreground/50",
+            )}
+          >
+            {step.status === "done"
+              ? "Done"
+              : step.status === "running"
+                ? "Running"
+                : "Queued"}
+          </span>
+        </div>
+      ))}
+
+      {/* Progress footer */}
+      <div
+        className={cn(
+          "flex items-center gap-3 pt-1 transition-all duration-500",
+          inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
+        )}
+        style={{ transitionDelay: inView ? "500ms" : "0ms" }}
+      >
+        <div className="flex-1 h-[3px] rounded-full bg-white/[0.06] overflow-hidden">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-primary to-emerald-400 transition-[width] duration-150 ease-out"
+            style={{ width: `${barPercent}%` }}
+          />
+        </div>
+        <span className="text-[11px] text-muted-foreground/50 whitespace-nowrap tabular-nums">
+          {barPercent}% complete
+        </span>
       </div>
     </div>
   );
 }
 
-/* ───────────────────── Custom Project Mock ────────────────────── */
+/* ─────────────────── Decision Insights Mock ─────────────────── */
 
-const weekDays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+function InsightsMock() {
+  const [ref, inView] = useInView(0.2);
+  const accuracy = useCountUp(94.2, inView, 1800, 1);
+  const decisions = useCountUp(1840, inView, 2000, 0);
 
-function CustomProjectMock() {
+  // Format decisions with comma
+  const decisionsFormatted = Number(
+    Math.round(Number(decisions)),
+  ).toLocaleString();
+
   return (
-    <div className="w-full max-w-[280px] mx-auto rounded-xl border border-border bg-surface p-3 shadow-lg shadow-black/20">
-      {/* Greeting */}
-      <div className="mb-3">
-        <p className="text-[11px] font-semibold text-foreground">Hey David!</p>
-        <p className="text-[9px] text-muted-foreground mt-0.5">
-          Here is your Custom project &amp; schedule
-        </p>
+    <div
+      ref={ref}
+      className="w-full max-w-[340px] mx-auto rounded-xl border border-border bg-surface p-4 shadow-lg shadow-black/20 flex flex-col gap-3"
+    >
+      {/* Header */}
+      <div
+        className={cn(
+          "flex items-center justify-between transition-all duration-500",
+          inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
+        )}
+      >
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
+          Decision Feed
+        </span>
+        <span className="flex items-center gap-1.5 text-[10px] text-emerald-400">
+          <span className="w-[5px] h-[5px] rounded-full bg-emerald-400 animate-pulse" />
+          Live
+        </span>
       </div>
 
-      {/* Ongoing project */}
-      <div className="rounded-lg bg-background/60 border border-border/50 p-2.5 mb-3">
-        <p className="text-[9px] text-muted-foreground mb-1">
-          On going project :
-        </p>
-        <p className="text-[11px] font-medium text-foreground mb-1.5">
-          Customer Support Chatbot
-        </p>
-        <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-primary to-violet-400"
-            style={{ width: "90%" }}
-          />
+      {/* Metric Grid — counting numbers */}
+      <div className="grid grid-cols-2 gap-2">
+        <div
+          className={cn(
+            "flex flex-col gap-1 p-3 rounded-[10px] bg-white/[0.03] border border-border/50 transition-all duration-600",
+            inView
+              ? "opacity-100 translate-y-0 scale-100"
+              : "opacity-0 translate-y-4 scale-95",
+          )}
+          style={{ transitionDelay: inView ? "100ms" : "0ms" }}
+        >
+          <span className="text-[10px] text-muted-foreground/50">
+            Forecast Accuracy
+          </span>
+          <span className="text-lg font-bold text-emerald-400 font-heading tabular-nums">
+            {accuracy}%
+          </span>
+          <span className="text-[10px] font-medium text-green-400">
+            ↑ 3.1% this week
+          </span>
         </div>
-        <p className="text-[8px] text-primary mt-1 text-right">90% Finished</p>
+        <div
+          className={cn(
+            "flex flex-col gap-1 p-3 rounded-[10px] bg-white/[0.03] border border-border/50 transition-all duration-600",
+            inView
+              ? "opacity-100 translate-y-0 scale-100"
+              : "opacity-0 translate-y-4 scale-95",
+          )}
+          style={{ transitionDelay: inView ? "200ms" : "0ms" }}
+        >
+          <span className="text-[10px] text-muted-foreground/50">
+            Decisions Triggered
+          </span>
+          <span className="text-lg font-bold text-primary font-heading tabular-nums">
+            {decisionsFormatted}
+          </span>
+          <span className="text-[10px] font-medium text-green-400">
+            ↑ 12% vs last mo
+          </span>
+        </div>
       </div>
 
-      {/* Schedule */}
-      <div className="rounded-lg bg-background/60 border border-border/50 p-2.5">
-        <p className="text-[10px] font-semibold text-foreground mb-2">
-          Schedule
-        </p>
-        {/* Day selector */}
-        <div className="flex items-center gap-1 mb-2.5">
-          {weekDays.map((day, i) => (
+      {/* Insight Rows — staggered */}
+      <div
+        className={cn(
+          "flex items-center gap-2.5 px-3 py-2.5 rounded-[10px] bg-white/[0.025] border border-border/50 transition-all duration-500 hover:bg-white/[0.04] hover:border-emerald-400/20 cursor-default",
+          inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4",
+        )}
+        style={{ transitionDelay: inView ? "350ms" : "0ms" }}
+      >
+        <div className="w-7 h-7 rounded-lg bg-emerald-400/10 flex items-center justify-center shrink-0">
+          <Package className="w-3.5 h-3.5 text-emerald-400" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs text-foreground truncate">
+            Reorder SKU-2291 — Stock at 8%
+          </p>
+          <p className="text-[10px] text-muted-foreground/50 mt-0.5 truncate">
+            Demand surge predicted · Next 14 days
+          </p>
+        </div>
+        <span className="text-[10px] font-medium text-primary whitespace-nowrap">
+          Act →
+        </span>
+      </div>
+
+      <div
+        className={cn(
+          "flex items-center gap-2.5 px-3 py-2.5 rounded-[10px] bg-white/[0.025] border border-border/50 transition-all duration-500 hover:bg-white/[0.04] hover:border-primary/20 cursor-default",
+          inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4",
+        )}
+        style={{ transitionDelay: inView ? "480ms" : "0ms" }}
+      >
+        <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+          <AlertTriangle className="w-3.5 h-3.5 text-primary" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs text-foreground truncate">
+            Churn risk: 34 accounts flagged
+          </p>
+          <p className="text-[10px] text-muted-foreground/50 mt-0.5 truncate">
+            Engagement drop detected · High value
+          </p>
+        </div>
+        <span className="text-[10px] font-medium text-primary whitespace-nowrap">
+          Act →
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────── ML Models Mock ─────────────────── */
+
+interface ModelItem {
+  name: string;
+  type: string;
+  accuracy: number;
+  highlighted?: boolean;
+}
+
+const models: ModelItem[] = [
+  {
+    name: "Demand Forecaster v2",
+    type: "Time-series · XGBoost",
+    accuracy: 93,
+    highlighted: true,
+  },
+  {
+    name: "Churn Predictor",
+    type: "Classification · LightGBM",
+    accuracy: 88,
+  },
+  {
+    name: "Anomaly Detector",
+    type: "Unsupervised · Isolation Forest",
+    accuracy: 91,
+  },
+];
+
+function MLModelsMock() {
+  const [ref, inView] = useInView(0.2);
+
+  return (
+    <div
+      ref={ref}
+      className="w-full max-w-[340px] mx-auto rounded-xl border border-border bg-surface p-4 shadow-lg shadow-black/20 flex flex-col gap-3"
+    >
+      {/* Header */}
+      <div
+        className={cn(
+          "text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 transition-all duration-500",
+          inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
+        )}
+      >
+        Model Registry
+      </div>
+
+      {/* Model Rows — staggered reveal with animated bars */}
+      {models.map((model, i) => (
+        <div
+          key={i}
+          className={cn(
+            "flex items-center gap-3 px-3 py-2.5 rounded-[10px] border transition-all hover:scale-[1.01]",
+            model.highlighted
+              ? "bg-amber-500/[0.06] border-amber-500/20 shadow-[0_0_10px_rgba(245,166,35,0.08)]"
+              : "bg-white/[0.03] border-border/50 hover:border-amber-500/10",
+            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
+          )}
+          style={{
+            transitionDuration: "500ms",
+            transitionDelay: inView ? `${100 + i * 120}ms` : "0ms",
+          }}
+        >
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-foreground truncate">{model.name}</p>
+            <p className="text-[10px] text-muted-foreground/50 mt-0.5">
+              {model.type}
+            </p>
+          </div>
+          {/* Accuracy bar — animates width from 0 */}
+          <div className="w-[60px] h-1 rounded-full bg-white/[0.07] overflow-hidden shrink-0">
             <div
-              key={day}
-              className={cn(
-                "flex-1 text-center py-1 rounded text-[8px] font-medium transition-colors",
-                i === 2
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground"
-              )}
-            >
-              {day}
-            </div>
-          ))}
-        </div>
-        {/* Events */}
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-center gap-2 px-2 py-1.5 rounded-md bg-muted/40 border border-border/40">
-            <Calendar className="w-3 h-3 text-primary shrink-0" />
-            <div>
-              <p className="text-[9px] font-medium text-foreground">
-                Discovery call
-              </p>
-              <p className="text-[8px] text-muted-foreground">
-                10:00 am to 10:30 am
-              </p>
-            </div>
+              className="h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-500 transition-[width] duration-1000 ease-out"
+              style={{
+                width: inView ? `${model.accuracy}%` : "0%",
+                transitionDelay: inView ? `${300 + i * 120}ms` : "0ms",
+              }}
+            />
           </div>
-          <div className="flex items-center gap-2 px-2 py-1.5 rounded-md bg-muted/40 border border-border/40">
-            <FolderCog className="w-3 h-3 text-violet-400 shrink-0" />
-            <div>
-              <p className="text-[9px] font-medium text-foreground">
-                Custom automation
-              </p>
-              <p className="text-[8px] text-muted-foreground">
-                06:00 pm to 06:30 pm
-              </p>
-            </div>
-          </div>
+          {/* Accuracy label */}
+          <span className="text-sm font-bold text-amber-500 font-heading w-8 text-right shrink-0 tabular-nums">
+            {model.accuracy}%
+          </span>
         </div>
-      </div>
+      ))}
+
+      {/* Deploy button */}
+      <button
+        className={cn(
+          "flex items-center justify-center gap-1.5 w-full py-2.5 rounded-[10px] bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-medium transition-all hover:bg-amber-500/15 hover:shadow-[0_0_16px_rgba(245,166,35,0.12)] hover:scale-[1.02] active:scale-[0.98]",
+          inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
+        )}
+        style={{
+          transitionDuration: "500ms",
+          transitionDelay: inView ? "500ms" : "0ms",
+        }}
+      >
+        <ArrowRight className="w-3.5 h-3.5" />
+        Deploy New Model
+      </button>
     </div>
   );
 }
@@ -326,6 +458,8 @@ interface ServiceCardProps {
   tags: string[];
   children: React.ReactNode;
   reverse?: boolean;
+  accentColor?: "purple" | "cyan" | "amber";
+  index?: number;
 }
 
 function ServiceCard({
@@ -335,34 +469,102 @@ function ServiceCard({
   tags,
   children,
   reverse = false,
+  accentColor = "purple",
+  index = 0,
 }: ServiceCardProps) {
+  const [ref, inView] = useInView(0.1);
+
+  const glowGradient = {
+    purple:
+      "bg-[radial-gradient(600px_circle_at_0%_50%,rgba(138,101,255,0.06)_0%,transparent_70%)]",
+    cyan: "bg-[radial-gradient(600px_circle_at_0%_50%,rgba(46,232,197,0.05)_0%,transparent_70%)]",
+    amber:
+      "bg-[radial-gradient(600px_circle_at_0%_50%,rgba(245,166,35,0.05)_0%,transparent_70%)]",
+  };
+
+  const iconStyles = {
+    purple: "bg-primary/10 border-primary/30 text-primary",
+    cyan: "bg-emerald-400/10 border-emerald-400/20 text-emerald-400",
+    amber: "bg-amber-500/10 border-amber-500/20 text-amber-500",
+  };
+
   return (
     <div
+      ref={ref}
       className={cn(
-        "group relative grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center rounded-2xl border border-border bg-card p-5 sm:p-6 lg:p-8 transition-all duration-300 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 overflow-hidden",
-        reverse && "lg:[direction:rtl]"
+        "group relative grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center rounded-2xl border border-border bg-card p-5 sm:p-6 lg:p-8 transition-all duration-700 overflow-hidden",
+        "hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5",
+        reverse && "lg:[direction:rtl]",
+        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10",
       )}
+      style={{ transitionDelay: inView ? `${index * 80}ms` : "0ms" }}
     >
       {/* Subtle glow on hover */}
-      <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-[radial-gradient(circle,rgba(109,59,255,0.04)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <div
+        className={cn(
+          "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none",
+          glowGradient[accentColor],
+        )}
+      />
 
       {/* Text content */}
-      <div className={cn("flex flex-col gap-4", reverse && "lg:[direction:ltr]")}>
-        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary">
+      <div
+        className={cn("flex flex-col gap-4", reverse && "lg:[direction:ltr]")}
+      >
+        {/* Icon — gentle float */}
+        <div
+          className={cn(
+            "flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl border transition-all duration-500 group-hover:shadow-lg",
+            iconStyles[accentColor],
+            accentColor === "purple" && "group-hover:shadow-primary/20",
+            accentColor === "cyan" && "group-hover:shadow-emerald-400/20",
+            accentColor === "amber" && "group-hover:shadow-amber-500/20",
+            inView
+              ? "opacity-100 translate-y-0 scale-100"
+              : "opacity-0 translate-y-3 scale-90",
+          )}
+          style={{ transitionDelay: inView ? "150ms" : "0ms" }}
+        >
           {icon}
         </div>
-        <h3 className="text-xl sm:text-2xl font-bold text-foreground leading-snug">
+
+        {/* Title */}
+        <h3
+          className={cn(
+            "text-xl sm:text-2xl font-bold text-foreground leading-snug transition-all duration-500",
+            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
+          )}
+          style={{ transitionDelay: inView ? "220ms" : "0ms" }}
+        >
           {title}
         </h3>
-        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+
+        {/* Description */}
+        <p
+          className={cn(
+            "text-sm sm:text-base text-muted-foreground leading-relaxed max-w-md transition-all duration-500",
+            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
+          )}
+          style={{ transitionDelay: inView ? "300ms" : "0ms" }}
+        >
           {description}
         </p>
+
+        {/* Tags — staggered pop-in */}
         <div className="flex flex-wrap gap-2 mt-1">
-          {tags.map((tag) => (
+          {tags.map((tag, i) => (
             <Badge
               key={tag}
               variant="muted"
-              className="text-[10px] sm:text-xs px-2.5 py-0.5"
+              className={cn(
+                "text-[10px] sm:text-xs px-2.5 py-0.5 transition-all duration-400 hover:bg-muted/80",
+                inView
+                  ? "opacity-100 translate-y-0 scale-100"
+                  : "opacity-0 translate-y-2 scale-90",
+              )}
+              style={{
+                transitionDelay: inView ? `${380 + i * 60}ms` : "0ms",
+              }}
             >
               {tag}
             </Badge>
@@ -370,12 +572,18 @@ function ServiceCard({
         </div>
       </div>
 
-      {/* Mock UI */}
+      {/* Mock UI — slide in from side + gentle float on hover */}
       <div
         className={cn(
-          "relative flex items-center justify-center py-4",
-          reverse && "lg:[direction:ltr]"
+          "relative flex items-center justify-center py-4 transition-all duration-700 group-hover:scale-[1.02]",
+          reverse && "lg:[direction:ltr]",
+          inView
+            ? "opacity-100 translate-x-0"
+            : reverse
+              ? "opacity-0 -translate-x-8"
+              : "opacity-0 translate-x-8",
         )}
+        style={{ transitionDelay: inView ? "200ms" : "0ms" }}
       >
         {children}
       </div>
@@ -386,65 +594,81 @@ function ServiceCard({
 /* ─────────────────── Main Services Section ─────────────────── */
 
 export function Services() {
+  const sectionRef = React.useRef<HTMLElement>(null);
+  const scrollProgress = useScrollProgress(sectionRef);
+
   return (
-    <section
-      id="services"
-      className="relative py-20 sm:py-24 md:py-32 px-8 sm:px-8 lg:px-8 section-gradient"
-    >
-      <div className="mx-auto max-w-7xl">
-        {/* Section Header */}
-        <SectionHeading
-          badge="Our Services"
-          title="Intelligence That Drives Real"
-          highlightedText="Business Decisions"
-          description="We handle your entire data lifecycle — from raw ingestion to ML-powered recommendations — so you can act, not just analyse."
-        />
+    <ScrollProgressContext.Provider value={scrollProgress}>
+      <section
+        ref={sectionRef}
+        id="services"
+        className="relative py-20 sm:py-24 md:py-32 px-8 sm:px-8 lg:px-8 section-gradient"
+      >
+        <div className="mx-auto max-w-7xl">
+          {/* Section Header */}
+          <SectionHeading
+            badge="Our Services"
+            title="Intelligence Solutions That Drive"
+            highlightedText="Real Decisions"
+            description="We handle your entire data lifecycle — from raw ingestion to ML-powered recommendations — so you can act, not just analyse."
+          />
 
-        {/* Service Cards */}
-        <div className="flex flex-col gap-6 sm:gap-8">
-          {/* 1 – Workflow Automation */}
-          <ServiceCard
-            icon={<Workflow className="w-5 h-5" />}
-            title="Automate repetitive tasks"
-            description="We help you streamline internal operations by automating manual workflows like data entry, reporting, and approval chains — saving time and cutting down errors."
-            tags={["Internal Task Bots", "100+ Automations"]}
-          >
-            <TaskListMock />
-          </ServiceCard>
+          {/* Service Cards */}
+          <div className="flex flex-col gap-6 sm:gap-8">
+            {/* 1 – Automated Data Pipelines */}
+            <ServiceCard
+              icon={<Box className="w-5 h-5" />}
+              title="Automated Data Pipelines"
+              description="We ingest data from any source, clean and standardize it automatically, and deliver structured, analysis-ready datasets — eliminating weeks of manual engineering work."
+              tags={[
+                "Multi-source Ingestion",
+                "Auto-cleaning",
+                "Real-time Sync",
+                "Schema Validation",
+              ]}
+              accentColor="purple"
+              index={0}
+            >
+              <PipelineMock />
+            </ServiceCard>
 
-          {/* 2 – AI Assistant */}
-          <ServiceCard
-            icon={<Bot className="w-5 h-5" />}
-            title="Delegate Daily Tasks"
-            description="From managing calendars to drafting emails and summarizing meetings, our AI assistants work around the clock to keep your business running smarter and faster."
-            tags={["Summaries", "Scheduling", "Many more"]}
-            reverse
-          >
-            <AIChatMock />
-          </ServiceCard>
+            {/* 2 – Decision Intelligence Insights */}
+            <ServiceCard
+              icon={<Activity className="w-5 h-5" />}
+              title="Decision Intelligence Insights"
+              description="Beyond charts and dashboards — Neurolytix delivers specific, prioritized recommendations your team can act on immediately, driven by live analytics and contextual business logic."
+              tags={[
+                "Live Dashboards",
+                "Actionable Alerts",
+                "Priority Scoring",
+                "Business Context",
+              ]}
+              accentColor="cyan"
+              reverse
+              index={1}
+            >
+              <InsightsMock />
+            </ServiceCard>
 
-          {/* 3 – Sales & Marketing */}
-          <ServiceCard
-            icon={<Megaphone className="w-5 h-5" />}
-            title="Accelerate Sales Growth"
-            description="AI tools for lead generation, personalized outreach, and automated content creation that scales your sales efforts and builds stronger brand presence."
-            tags={["Leads", "Content", "Social post"]}
-          >
-            <OutreachMock />
-          </ServiceCard>
-
-          {/* 4 – Custom Projects */}
-          <ServiceCard
-            icon={<FolderCog className="w-5 h-5" />}
-            title="Build Smarter Systems"
-            description="Whether you're starting from scratch or enhancing an existing system, we offer strategic consulting and develop custom AI projects aligned with your unique goals."
-            tags={["Strategy", "Custom AI", "Consulting"]}
-            reverse
-          >
-            <CustomProjectMock />
-          </ServiceCard>
+            {/* 3 – Pre-built & Custom ML Models */}
+            <ServiceCard
+              icon={<Radio className="w-5 h-5" />}
+              title="Pre-built & Custom ML Models"
+              description="Deploy industry-specific ML models out of the box, or let us train custom models on your data. Demand forecasting, churn prediction, anomaly detection — ready when you are."
+              tags={[
+                "Demand Forecasting",
+                "Churn Prediction",
+                "Anomaly Detection",
+                "Custom Training",
+              ]}
+              accentColor="amber"
+              index={2}
+            >
+              <MLModelsMock />
+            </ServiceCard>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </ScrollProgressContext.Provider>
   );
 }
