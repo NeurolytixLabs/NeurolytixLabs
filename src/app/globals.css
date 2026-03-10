@@ -308,6 +308,40 @@ video {
     scrollbar-width: none;
 }
 
+/* ─────────────────────── Shine Text ─────────────────────── */
+
+.btn-shine {
+    background: linear-gradient(
+        to right,
+        #a78bfa 0%,
+        #ffffff 15%,
+        #c4b5fd 30%,
+        #7c3aed 50%,
+        #a78bfa 100%
+    );
+    background-size: 200% auto;
+    background-position: 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 3s infinite linear;
+    animation-fill-mode: forwards;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+@keyframes shine {
+    0% {
+        background-position: 0;
+    }
+    60% {
+        background-position: 180px;
+    }
+    100% {
+        background-position: 180px;
+    }
+}
+
 /* ─────────────────────── Orbit Button ─────────────────────── */
 
 .orbit-btn {
@@ -609,7 +643,8 @@ textarea {
     .animate-blink,
     .animate-float,
     .animate-drift,
-    .orbit-circle {
+    .orbit-circle,
+    .btn-shine {
         animation: none !important;
     }
 

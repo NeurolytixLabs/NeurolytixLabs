@@ -53,7 +53,7 @@ export function Hero() {
           style={{ animationDelay: "0ms" }}
         >
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Beyond Analytics Dashboards</span>
+          <span className="btn-shine">Beyond Analytics Dashboards</span>
         </Badge>
 
         {/* Main Headline */}
