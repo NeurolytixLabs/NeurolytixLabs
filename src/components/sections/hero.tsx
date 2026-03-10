@@ -58,7 +58,7 @@ export function Hero() {
 
         {/* Main Headline */}
         <h1
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-4 sm:mb-5 animate-fade-in-up"
+          className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] mb-4 sm:mb-5 animate-fade-in-up"
           style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
         >
           Turning Data <br className="hidden sm:inline" />
@@ -67,7 +67,7 @@ export function Hero() {
 
         {/* Subtitle */}
         <p
-          className="max-w-2xl text-base sm:text-lg md:text-xl text-muted-foreground/70 leading-relaxed mb-8 sm:mb-10 animate-fade-in-up"
+          className="max-w-2xl text-base sm:text-lg md:text-xl text-muted-foreground/90 leading-relaxed mb-8 sm:mb-10 animate-fade-in-up"
           style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
         >
           A modern decision intelligence platform that turns operational data
@@ -81,12 +81,13 @@ export function Hero() {
         >
           <a href="#process" className="w-full sm:w-auto">
             <GlowingCTAButton className="w-full">
-              See How It Works
-              <ArrowRight className="inline-block w-4 h-4 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
+              Request Early Access
             </GlowingCTAButton>
           </a>
           <a href="#services" className="w-full sm:w-auto">
-            <OrbitButton className="w-full">View Our Services</OrbitButton>
+            <OrbitButton className="w-full">View Our Services
+              <ArrowRight className="inline-block w-4 h-4 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </OrbitButton>
           </a>
         </div>
 
@@ -97,7 +98,7 @@ export function Hero() {
         >
           <ShieldCheck className="w-4 h-4 text-[#6d3bff]/60 shrink-0" />
           <p className="text-xs sm:text-sm text-muted-foreground/50 tracking-wide">
-            Trusted by growing startups and data-driven teams
+            Built for modern startups and data-driven teams
           </p>
         </div>
       </div>

@@ -119,7 +119,7 @@ export function Navbar() {
 
                 {/* Desktop CTA */}
                 <div className="hidden lg:flex items-center gap-3">
-                  <GlowButton>Request Early Access</GlowButton>
+                  <GlowButton>Schedule a Free Call</GlowButton>
                 </div>
 
                 {/* Mobile Menu Toggle */}
@@ -220,7 +220,7 @@ export function Navbar() {
               className="w-full"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Request Early Access
+              Schedule a Free Call
             </GlowButton>
           </div>
         </div>

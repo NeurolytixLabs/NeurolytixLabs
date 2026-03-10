@@ -389,15 +389,15 @@ export function Services() {
   return (
     <section
       id="services"
-      className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 lg:px-8 section-gradient"
+      className="relative py-20 sm:py-24 md:py-32 px-8 sm:px-8 lg:px-8 section-gradient"
     >
       <div className="mx-auto max-w-7xl">
         {/* Section Header */}
         <SectionHeading
           badge="Our Services"
-          title="AI Solutions That Take Your Business to the"
-          highlightedText="Next Level"
-          description="We design, develop, and implement automation tools that help you work smarter, not harder"
+          title="Intelligence That Drives Real"
+          highlightedText="Business Decisions"
+          description="We handle your entire data lifecycle — from raw ingestion to ML-powered recommendations — so you can act, not just analyse."
         />
 
         {/* Service Cards */}
