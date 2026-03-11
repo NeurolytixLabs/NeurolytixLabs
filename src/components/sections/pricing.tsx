@@ -3,108 +3,224 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Check,
-  Sparkles,
-  ArrowRight,
-  Phone,
-  Zap,
-  Crown,
-  Building2,
-} from "lucide-react";
 
-/* ─────────────────────── Pricing Data ─────────────────────── */
+/* ─────────────────────── Types ─────────────────────── */
 
 interface PricingFeature {
   text: string;
   highlighted?: boolean;
+  disabled?: boolean;
 }
 
 interface PricingTier {
   id: string;
   name: string;
-  icon: React.ReactNode;
-  monthlyPrice: number | null;
-  annualPrice: number | null;
-  priceLabel?: string;
+  icon: string;
+  iconBg: string;
+  iconBorder: string;
+  monthlyPrice: number;
+  annualPrice: number;
+  priceColor: string;
+  currencyColor: string;
   description: string;
   features: PricingFeature[];
   cta: string;
+  ctaStyle: "default" | "pro" | "enterprise";
   isPopular: boolean;
-  accentColor: string;
-  accentBg: string;
-  accentBorder: string;
-  accentGlow: string;
+  checkStyle: string;
+  featuresLabelColor?: string;
 }
+
+/* ─────────────────────── Pricing Data ─────────────────────── */
 
 const pricingTiers: PricingTier[] = [
   {
     id: "starter",
     name: "Starter",
-    icon: <Zap className="w-5 h-5" />,
-    monthlyPrice: 37,
-    annualPrice: 29,
-    description: "Perfect for small businesses starting with AI automation.",
+    icon: "⚡",
+    iconBg: "bg-emerald-500/[0.12]",
+    iconBorder: "border-emerald-500/[0.22]",
+    monthlyPrice: 135,
+    annualPrice: 108,
+    priceColor: "text-emerald-400",
+    currencyColor: "text-muted-foreground",
+    description:
+      "Perfect for SMEs and early-stage teams exploring data-driven decisions for the first time.",
     features: [
-      { text: "Basic workflow automation" },
-      { text: "AI-powered personal assistant" },
-      { text: "Standard analytics & reporting" },
-      { text: "Email & chat support" },
-      { text: "Up to 3 AI integrations" },
+      { text: "Core data ingestion pipelines" },
+      { text: "Standard analytics dashboards" },
+      { text: "Access to 3 pre-built ML models" },
+      { text: "Basic decision recommendations" },
+      { text: "Standard support (48h response)" },
+      { text: "Custom ML model training", disabled: true },
+      { text: "Dedicated account manager", disabled: true },
     ],
-    cta: "Choose this plan",
+    cta: "Get Started",
+    ctaStyle: "default",
     isPopular: false,
-    accentColor: "text-emerald-400",
-    accentBg: "bg-emerald-500/10",
-    accentBorder: "border-emerald-500/20",
-    accentGlow: "rgba(52, 211, 153, 0.08)",
+    checkStyle: "default",
   },
   {
-    id: "professional",
-    name: "Professional",
-    icon: <Crown className="w-5 h-5" />,
-    monthlyPrice: 75,
-    annualPrice: 59,
-    description: "Perfect for growing teams that need advanced AI tools.",
+    id: "pro",
+    name: "Pro",
+    icon: "👑",
+    iconBg: "bg-violet-500/[0.18]",
+    iconBorder: "border-violet-500/30",
+    monthlyPrice: 175,
+    annualPrice: 140,
+    priceColor: "text-violet-400",
+    currencyColor: "text-violet-400",
+    description:
+      "For growing businesses ready to turn analytics into a competitive advantage with advanced ML.",
     features: [
-      { text: "Advanced workflow automation", highlighted: true },
-      { text: "AI-driven sales & marketing tools", highlighted: true },
-      { text: "Enhanced data analytics & insights" },
-      { text: "Priority customer support" },
-      { text: "Up to 10 AI integrations", highlighted: true },
+      { text: "Everything in Starter", highlighted: true },
+      { text: "Advanced analytics & anomaly detection", highlighted: true },
+      { text: "Expanded ML model library (10+ models)", highlighted: true },
+      { text: "Priority decision recommendations", highlighted: true },
+      { text: "Priority support (12h response)", highlighted: true },
+      { text: "Moderate customisation & add-ons", highlighted: true },
+      { text: "Dedicated account manager", disabled: true },
     ],
-    cta: "Choose this plan",
+    cta: "Choose This Plan",
+    ctaStyle: "pro",
     isPopular: true,
-    accentColor: "text-primary",
-    accentBg: "bg-primary/10",
-    accentBorder: "border-primary/20",
-    accentGlow: "rgba(109, 59, 255, 0.10)",
+    checkStyle: "pro",
+    featuresLabelColor: "text-violet-400/50",
   },
   {
     id: "enterprise",
     name: "Enterprise",
-    icon: <Building2 className="w-5 h-5" />,
-    monthlyPrice: null,
-    annualPrice: null,
-    priceLabel: "Custom",
-    description: "Perfect for large organizations needing full customization.",
+    icon: "🏢",
+    iconBg: "bg-cyan-500/[0.12]",
+    iconBorder: "border-cyan-500/[0.22]",
+    monthlyPrice: 220,
+    annualPrice: 176,
+    priceColor: "text-cyan-400",
+    currencyColor: "text-cyan-400",
+    description:
+      "For data-mature organisations needing full platform access, custom models, and strategic support.",
     features: [
-      { text: "Fully customizable AI automation", highlighted: true },
-      { text: "Dedicated AI business consultant", highlighted: true },
-      { text: "Enterprise-grade compliance" },
-      { text: "24/7 VIP support", highlighted: true },
-      { text: "Unlimited AI integrations", highlighted: true },
+      { text: "Everything in Pro", highlighted: true },
+      { text: "Full platform access — unlimited usage", highlighted: true },
+      { text: "Custom ML model training & deployment", highlighted: true },
+      { text: "Dedicated account manager", highlighted: true },
+      { text: "24/7 VIP support + SLA guarantee", highlighted: true },
+      { text: "Premium strategic consulting included", highlighted: true },
+      { text: "Full white-labelling & API access", highlighted: true },
     ],
-    cta: "Schedule a call",
+    cta: "📞 Schedule a Call",
+    ctaStyle: "enterprise",
     isPopular: false,
-    accentColor: "text-amber-400",
-    accentBg: "bg-amber-500/10",
-    accentBorder: "border-amber-500/20",
-    accentGlow: "rgba(251, 191, 36, 0.08)",
+    checkStyle: "enterprise",
   },
 ];
+
+/* ─────────────────────── Compare Table Data ─────────────────────── */
+
+interface CompareRow {
+  feature: string;
+  starter: { text?: string; check?: "yes" | "no" };
+  pro: { text?: string; check?: "yes" | "no" };
+  enterprise: { text?: string; check?: "yes" | "no" };
+}
+
+const compareRows: CompareRow[] = [
+  {
+    feature: "Data Ingestion Pipelines",
+    starter: { check: "yes" },
+    pro: { check: "yes" },
+    enterprise: { check: "yes" },
+  },
+  {
+    feature: "Pre-built ML Models",
+    starter: { text: "3 models" },
+    pro: { text: "10+ models" },
+    enterprise: { text: "Unlimited" },
+  },
+  {
+    feature: "Custom ML Model Training",
+    starter: { check: "no" },
+    pro: { check: "no" },
+    enterprise: { check: "yes" },
+  },
+  {
+    feature: "Decision Recommendations",
+    starter: { text: "Basic" },
+    pro: { text: "Priority" },
+    enterprise: { text: "Full Suite" },
+  },
+  {
+    feature: "Anomaly Detection & Alerts",
+    starter: { check: "no" },
+    pro: { check: "yes" },
+    enterprise: { check: "yes" },
+  },
+  {
+    feature: "Data Storage",
+    starter: { text: "Limited" },
+    pro: { text: "Extended" },
+    enterprise: { text: "Unlimited" },
+  },
+  {
+    feature: "Support Response Time",
+    starter: { text: "48 hours" },
+    pro: { text: "12 hours" },
+    enterprise: { text: "24/7 VIP" },
+  },
+  {
+    feature: "Dedicated Account Manager",
+    starter: { check: "no" },
+    pro: { check: "no" },
+    enterprise: { check: "yes" },
+  },
+  {
+    feature: "API Access & White-labelling",
+    starter: { check: "no" },
+    pro: { check: "no" },
+    enterprise: { check: "yes" },
+  },
+  {
+    feature: "Strategic Consulting",
+    starter: { check: "no" },
+    pro: { check: "no" },
+    enterprise: { text: "✓ Included" },
+  },
+];
+
+/* ─────────────────────── Animated Number ─────────────────────── */
+
+function useAnimatedPrice(target: number, duration = 380) {
+  const [display, setDisplay] = React.useState(target);
+  const prevRef = React.useRef(target);
+  const rafRef = React.useRef<number | null>(null);
+
+  React.useEffect(() => {
+    const from = prevRef.current;
+    const to = target;
+    prevRef.current = target;
+
+    if (from === to) return;
+
+    const start = performance.now();
+
+    function step(now: number) {
+      const t = Math.min((now - start) / duration, 1);
+      const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      setDisplay(Math.round(from + (to - from) * ease));
+      if (t < 1) {
+        rafRef.current = requestAnimationFrame(step);
+      }
+    }
+
+    rafRef.current = requestAnimationFrame(step);
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [target, duration]);
+
+  return display;
+}
 
 /* ─────────────────────── Billing Toggle ─────────────────────── */
 
@@ -115,11 +231,11 @@ interface BillingToggleProps {
 
 function BillingToggle({ isAnnual, onToggle }: BillingToggleProps) {
   return (
-    <div className="flex items-center justify-center gap-3 mb-12 md:mb-16">
+    <div className="flex items-center justify-center gap-3.5 mb-13">
       <span
         className={cn(
-          "text-sm font-medium transition-colors duration-200 cursor-pointer",
-          !isAnnual ? "text-foreground" : "text-muted-foreground"
+          "text-sm font-medium transition-colors duration-250 cursor-pointer select-none",
+          !isAnnual ? "text-foreground" : "text-muted-foreground",
         )}
         onClick={() => isAnnual && onToggle()}
       >
@@ -130,10 +246,10 @@ function BillingToggle({ isAnnual, onToggle }: BillingToggleProps) {
       <button
         onClick={onToggle}
         className={cn(
-          "relative inline-flex h-7 w-[52px] items-center rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background cursor-pointer",
-          isAnnual
-            ? "bg-primary shadow-md shadow-primary/30"
-            : "bg-muted border border-border"
+          "relative inline-flex h-[26px] w-12 items-center rounded-full shrink-0",
+          "transition-colors duration-300 cursor-pointer",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          isAnnual ? "bg-primary" : "bg-primary/25 border border-primary/40",
         )}
         role="switch"
         aria-checked={isAnnual}
@@ -141,35 +257,34 @@ function BillingToggle({ isAnnual, onToggle }: BillingToggleProps) {
       >
         <span
           className={cn(
-            "inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-300 ease-out",
-            isAnnual ? "translate-x-[27px]" : "translate-x-[3px]"
+            "inline-block h-[18px] w-[18px] rounded-full bg-white shadow-[0_2px_6px_rgba(0,0,0,0.4)]",
+            "transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
+            isAnnual ? "translate-x-[26px]" : "translate-x-[3px]",
           )}
         />
       </button>
 
       <span
         className={cn(
-          "text-sm font-medium transition-colors duration-200 cursor-pointer",
-          isAnnual ? "text-foreground" : "text-muted-foreground"
+          "text-sm font-medium transition-colors duration-250 cursor-pointer select-none",
+          isAnnual ? "text-foreground" : "text-muted-foreground",
         )}
         onClick={() => !isAnnual && onToggle()}
       >
         Annually
       </span>
 
-      {/* Savings badge */}
-      <Badge
-        variant="glow"
+      {/* Save chip */}
+      <span
         className={cn(
-          "text-[10px] px-2 py-0.5 transition-all duration-300",
-          isAnnual
-            ? "opacity-100 translate-x-0"
-            : "opacity-0 -translate-x-2 pointer-events-none"
+          "text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full",
+          "bg-emerald-500/[0.12] border border-emerald-500/25 text-emerald-400",
+          "transition-opacity duration-300",
+          isAnnual ? "opacity-100" : "opacity-0 pointer-events-none",
         )}
       >
-        <Sparkles className="w-3 h-3 mr-0.5" />
         Save 20%
-      </Badge>
+      </span>
     </div>
   );
 }
@@ -179,172 +294,280 @@ function BillingToggle({ isAnnual, onToggle }: BillingToggleProps) {
 interface PricingCardProps {
   tier: PricingTier;
   isAnnual: boolean;
-  index: number;
 }
 
-function PricingCard({ tier, isAnnual, index }: PricingCardProps) {
+function PricingCard({ tier, isAnnual }: PricingCardProps) {
   const currentPrice = isAnnual ? tier.annualPrice : tier.monthlyPrice;
-  const isCustom = currentPrice === null;
+  const animatedPrice = useAnimatedPrice(currentPrice);
+  const isPro = tier.isPopular;
 
   return (
     <div
       className={cn(
-        "group relative flex flex-col rounded-2xl border bg-card transition-all duration-500 overflow-hidden",
-        tier.isPopular
-          ? "border-primary/30 shadow-xl shadow-primary/10 lg:scale-[1.04] z-10"
-          : "border-border hover:border-primary/15 shadow-lg shadow-black/10 hover:shadow-primary/5"
+        "group relative flex flex-col rounded-[22px] border bg-card",
+        "p-7 sm:p-8",
+        "transition-all duration-300 ease-out overflow-hidden",
+        isPro
+          ? [
+              "bg-[#0d0d1e] border-primary/40",
+              "lg:-translate-y-2",
+              "shadow-[0_0_0_1px_rgba(124,92,252,0.3),0_20px_60px_rgba(124,92,252,0.18),0_4px_16px_rgba(0,0,0,0.4)]",
+              "hover:border-primary/60 hover:lg:-translate-y-3",
+            ]
+          : ["border-border", "hover:border-white/[0.14] hover:-translate-y-1"],
       )}
     >
-      {/* Popular badge — absolutely positioned at top-right */}
-      {tier.isPopular && (
-        <div className="absolute top-4 right-4 z-20">
-          <Badge
-            variant="default"
-            className="text-[10px] px-2.5 py-0.5 tracking-wider uppercase font-semibold shadow-md shadow-primary/20"
-          >
-            Popular
-          </Badge>
-        </div>
-      )}
-
-      {/* Top glow accent for popular card */}
-      {tier.isPopular && (
+      {/* Pro: top shimmer line */}
+      {isPro && (
         <div
-          className="absolute -top-px left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent"
+          className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-violet-400 to-cyan-400 rounded-t-[22px]"
           aria-hidden="true"
         />
       )}
 
-      {/* Hover glow background */}
-      <div
-        className={cn(
-          "absolute -top-32 -right-32 w-64 h-64 rounded-full blur-3xl pointer-events-none transition-opacity duration-500",
-          tier.isPopular ? "opacity-60" : "opacity-0 group-hover:opacity-100"
-        )}
-        style={{ backgroundColor: tier.accentGlow }}
-        aria-hidden="true"
-      />
+      {/* Pro: background glow */}
+      {isPro && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 0%, rgba(124,92,252,0.12), transparent 65%)",
+          }}
+          aria-hidden="true"
+        />
+      )}
 
-      {/* Card content */}
-      <div className="relative z-10 flex flex-col flex-1 p-6 sm:p-7 lg:p-8">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-5">
+      {/* Card head */}
+      <div className="relative z-10 flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2.5">
           <div
             className={cn(
-              "flex items-center justify-center w-10 h-10 rounded-xl border transition-transform duration-300 group-hover:scale-110",
-              tier.accentBg,
-              tier.accentBorder,
-              tier.accentColor
+              "flex items-center justify-center w-10 h-10 rounded-[11px] border text-[17px] shrink-0",
+              tier.iconBg,
+              tier.iconBorder,
             )}
           >
             {tier.icon}
           </div>
-          <span className="text-lg font-bold text-foreground">{tier.name}</span>
+          <span className="text-[17px] font-bold text-foreground">
+            {tier.name}
+          </span>
         </div>
 
-        {/* Price */}
-        <div className="mb-4">
-          {isCustom ? (
-            <div className="flex items-baseline gap-1">
-              <span className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">
-                {tier.priceLabel}
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-baseline gap-1">
-              <span className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">
-                ${currentPrice}
-              </span>
-              <span className="text-base text-muted-foreground font-medium">
-                /month
-              </span>
-            </div>
-          )}
-
-          {/* Annual savings hint */}
-          {!isCustom && isAnnual && (
-            <p className="text-xs text-primary mt-1.5 font-medium">
-              Billed ${(currentPrice! * 12).toLocaleString()}/year — you save $
-              {((tier.monthlyPrice! - currentPrice!) * 12).toLocaleString()}
-            </p>
-          )}
-        </div>
-
-        {/* Description */}
-        <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-          {tier.description}
-        </p>
-
-        {/* CTA Button */}
-        {tier.isPopular ? (
-          <Button
-            size="lg"
-            className="w-full rounded-xl group/btn mb-7"
-          >
-            {tier.cta}
-            <ArrowRight className="w-4 h-4 ml-1.5 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
-          </Button>
-        ) : isCustom ? (
-          <Button
-            variant="secondary"
-            size="lg"
-            className="w-full rounded-xl group/btn mb-7"
-          >
-            <Phone className="w-4 h-4 mr-1.5" />
-            {tier.cta}
-            <ArrowRight className="w-4 h-4 ml-1.5 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
-          </Button>
-        ) : (
-          <Button
-            variant="outline"
-            size="lg"
-            className="w-full rounded-xl group/btn mb-7"
-          >
-            {tier.cta}
-            <ArrowRight className="w-4 h-4 ml-1.5 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
-          </Button>
+        {isPro && (
+          <span className="bg-primary text-white text-[9.5px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full shadow-[0_0_12px_rgba(124,92,252,0.5)]">
+            POPULAR
+          </span>
         )}
+      </div>
 
-        {/* Divider */}
-        <div className="h-px bg-border mb-6" />
+      {/* Price */}
+      <div className="relative z-10 mb-2">
+        <div className="flex items-baseline gap-1 mb-1.5">
+          <span className={cn("text-2xl font-bold mt-1.5", tier.currencyColor)}>
+            $
+          </span>
+          <span
+            className={cn(
+              "text-[52px] font-extrabold tracking-tighter leading-none",
+              tier.priceColor,
+            )}
+          >
+            {animatedPrice}
+          </span>
+          <span className="text-[13px] text-muted-foreground font-normal mb-1">
+            /month
+          </span>
+        </div>
+      </div>
 
-        {/* Features */}
-        <div className="flex flex-col gap-3.5 flex-1">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            What&apos;s Included:
-          </p>
-          {tier.features.map((feature, i) => (
-            <div key={i} className="flex items-start gap-2.5">
+      {/* Description */}
+      <p className="relative z-10 text-[13px] text-muted-foreground leading-relaxed font-light mb-6 min-h-[42px]">
+        {tier.description}
+      </p>
+
+      {/* CTA Button */}
+      <button
+        className={cn(
+          "relative z-10 w-full py-3.5 px-5 rounded-[11px] text-sm font-bold",
+          "flex items-center justify-center gap-2 mb-7",
+          "transition-all duration-250 ease-out cursor-pointer",
+          tier.ctaStyle === "pro" && [
+            "bg-primary text-white",
+            "shadow-[0_4px_20px_rgba(124,92,252,0.35)]",
+            "hover:bg-violet-400 hover:shadow-[0_6px_28px_rgba(124,92,252,0.5)] hover:-translate-y-0.5",
+          ],
+          tier.ctaStyle === "default" && [
+            "bg-white/[0.06] border border-white/10 text-foreground",
+            "hover:bg-white/10 hover:border-white/20 hover:-translate-y-px",
+          ],
+          tier.ctaStyle === "enterprise" && [
+            "bg-white/[0.06] border border-white/10 text-foreground",
+            "hover:bg-white/10 hover:border-white/20 hover:-translate-y-px",
+          ],
+        )}
+      >
+        {tier.cta}
+        <span className="text-base transition-transform duration-200 group-hover:translate-x-0.5">
+          →
+        </span>
+      </button>
+
+      {/* Divider */}
+      <div className="relative z-10 h-px bg-border mb-5.5" />
+
+      {/* Features label */}
+      <div
+        className={cn(
+          "relative z-10 text-[10px] font-bold tracking-[0.12em] uppercase mb-3.5",
+          tier.featuresLabelColor || "text-muted-foreground/60",
+        )}
+      >
+        What&apos;s Included
+      </div>
+
+      {/* Feature list */}
+      <ul className="relative z-10 flex flex-col gap-2.5 list-none">
+        {tier.features.map((feature, i) => (
+          <li
+            key={i}
+            className={cn(
+              "flex items-start gap-2.5 text-[13.5px] leading-snug font-light",
+              feature.disabled
+                ? "opacity-40"
+                : feature.highlighted
+                  ? "text-foreground font-medium"
+                  : "text-white/65",
+            )}
+          >
+            {/* Check icon */}
+            <div
+              className={cn(
+                "flex items-center justify-center w-[18px] h-[18px] rounded-full shrink-0 mt-px text-[9px]",
+                tier.checkStyle === "default" &&
+                  "bg-white/[0.08] border border-white/[0.12] text-muted-foreground",
+                tier.checkStyle === "pro" &&
+                  cn(
+                    "bg-primary/20 border border-primary/40 text-violet-400",
+                    feature.disabled && "opacity-40",
+                  ),
+                tier.checkStyle === "enterprise" &&
+                  "bg-cyan-500/[0.12] border border-cyan-500/25 text-cyan-400",
+              )}
+            >
+              {feature.disabled ? "–" : "✓"}
+            </div>
+            <span>{feature.text}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/* ─────────────────────── Compare Cell ─────────────────────── */
+
+interface CompareCellValue {
+  text?: string;
+  check?: "yes" | "no";
+}
+
+function CompareCellContent({
+  value,
+  colorClass,
+}: {
+  value: CompareCellValue;
+  colorClass: string;
+}) {
+  if (value.check === "yes") {
+    return <span className={cn("text-sm", colorClass)}>✓</span>;
+  }
+  if (value.check === "no") {
+    return <span className="text-sm text-muted-foreground/60">–</span>;
+  }
+  if (value.text) {
+    return <span className={cn("text-xs", colorClass)}>{value.text}</span>;
+  }
+  return null;
+}
+
+/* ─────────────────────── Compare Table ─────────────────────── */
+
+function CompareTable() {
+  return (
+    <div className="mt-14 hidden lg:block">
+      <h3 className="text-[13px] font-bold tracking-[0.08em] uppercase text-muted-foreground/60 text-center mb-5">
+        Full Plan Comparison
+      </h3>
+
+      <div className="grid grid-cols-[2fr_1fr_1fr_1fr] border border-border rounded-[14px] overflow-hidden">
+        {/* Header row */}
+        <div className="px-4 py-2.5 text-[11px] font-bold tracking-[0.08em] uppercase text-muted-foreground/60 bg-white/[0.02] border-b border-r border-border">
+          Feature
+        </div>
+        <div className="px-4 py-2.5 text-[11px] font-bold tracking-[0.08em] uppercase text-muted-foreground/60 bg-white/[0.02] border-b border-r border-border text-center">
+          Starter
+        </div>
+        <div className="px-4 py-2.5 text-[11px] font-bold tracking-[0.08em] uppercase text-violet-400 bg-white/[0.02] border-b border-r border-border text-center">
+          Pro
+        </div>
+        <div className="px-4 py-2.5 text-[11px] font-bold tracking-[0.08em] uppercase text-cyan-400 bg-white/[0.02] border-b border-border text-center">
+          Enterprise
+        </div>
+
+        {/* Data rows */}
+        {compareRows.map((row, i) => {
+          const isLast = i === compareRows.length - 1;
+          return (
+            <React.Fragment key={row.feature}>
+              {/* Feature name */}
               <div
                 className={cn(
-                  "flex items-center justify-center w-5 h-5 rounded-full shrink-0 mt-0.5 transition-colors duration-200",
-                  feature.highlighted
-                    ? cn(tier.accentBg, tier.accentBorder, "border")
-                    : "bg-muted/60"
+                  "px-4 py-3 text-xs text-white/60 font-normal bg-card border-r border-border",
+                  !isLast && "border-b",
                 )}
               >
-                <Check
-                  className={cn(
-                    "w-3 h-3",
-                    feature.highlighted
-                      ? tier.accentColor
-                      : "text-muted-foreground"
-                  )}
+                {row.feature}
+              </div>
+              {/* Starter */}
+              <div
+                className={cn(
+                  "px-4 py-3 text-center bg-card border-r border-border",
+                  !isLast && "border-b",
+                )}
+              >
+                <CompareCellContent
+                  value={row.starter}
+                  colorClass="text-emerald-400"
                 />
               </div>
-              <span
+              {/* Pro */}
+              <div
                 className={cn(
-                  "text-sm leading-snug",
-                  feature.highlighted
-                    ? "text-foreground font-medium"
-                    : "text-muted-foreground"
+                  "px-4 py-3 text-center bg-primary/[0.03] border-r border-border",
+                  !isLast && "border-b",
                 )}
               >
-                {feature.text}
-              </span>
-            </div>
-          ))}
-        </div>
+                <CompareCellContent
+                  value={row.pro}
+                  colorClass="text-violet-400"
+                />
+              </div>
+              {/* Enterprise */}
+              <div
+                className={cn(
+                  "px-4 py-3 text-center bg-card border-border",
+                  !isLast && "border-b",
+                )}
+              >
+                <CompareCellContent
+                  value={row.enterprise}
+                  colorClass="text-cyan-400"
+                />
+              </div>
+            </React.Fragment>
+          );
+        })}
       </div>
     </div>
   );
@@ -358,21 +581,24 @@ export function Pricing() {
   return (
     <section
       id="pricing"
-      className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 lg:px-8 section-gradient"
+      className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 lg:px-8"
     >
-      {/* Background effects */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[700px] bg-[radial-gradient(ellipse_at_top,rgba(109,59,255,0.08)_0%,transparent_60%)]" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse_at_bottom,rgba(109,59,255,0.04)_0%,transparent_70%)]" />
+      {/* Ambient orbs */}
+      <div
+        className="absolute inset-0 pointer-events-none overflow-hidden"
+        aria-hidden="true"
+      >
+        <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-primary/[0.13] blur-[140px]" />
+        <div className="absolute bottom-20 -right-10 w-[350px] h-[350px] rounded-full bg-cyan-400/[0.13] blur-[140px]" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl">
+      <div className="relative mx-auto max-w-[1160px]">
         {/* Section Header */}
         <SectionHeading
           badge="Pricing"
-          title="The Best AI Automation, at the"
-          highlightedText="Right Price"
-          description="Choose a plan that fits your business needs and start automating with AI"
+          title="Decision Intelligence"
+          highlightedText="at the Right Price"
+          description="No data team required. No months of setup. Choose a plan that fits where your business is today — and scale as you grow."
         />
 
         {/* Billing Toggle */}
@@ -382,22 +608,23 @@ export function Pricing() {
         />
 
         {/* Pricing Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-5 items-start max-w-5xl mx-auto">
-          {pricingTiers.map((tier, index) => (
-            <PricingCard
-              key={tier.id}
-              tier={tier}
-              isAnnual={isAnnual}
-              index={index}
-            />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
+          {pricingTiers.map((tier) => (
+            <PricingCard key={tier.id} tier={tier} isAnnual={isAnnual} />
           ))}
         </div>
 
-        {/* Bottom note */}
-        <p className="text-center text-xs text-muted-foreground/60 mt-8 sm:mt-10">
-          All plans include a 14-day free trial. No credit card required.
-          Cancel anytime.
+        {/* Footer note */}
+        <p className="text-center text-[13px] text-muted-foreground/60 font-light mt-10">
+          All plans include a{" "}
+          <strong className="text-muted-foreground font-medium">
+            14-day free trial
+          </strong>
+          . No credit card required. Cancel anytime. Annual billing saves 20%.
         </p>
+
+        {/* Compare Table */}
+        <CompareTable />
       </div>
     </section>
   );

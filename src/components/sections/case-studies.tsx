@@ -3,241 +3,194 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { Badge } from "@/components/ui/badge";
-import {
-  Package,
-  HeartPulse,
-  DollarSign,
-  Rocket,
-  GripHorizontal,
-  ChevronLeft,
-  ChevronRight,
-  TrendingUp,
-  TrendingDown,
-  Clock,
-  Zap,
-  Target,
-  BarChart3,
-  CheckCircle2,
-  ArrowUpRight,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 /* ─────────────────────── Case Study Data ─────────────────────── */
 
 interface ImpactMetric {
   label: string;
   value: string;
+  icon: string;
 }
 
 interface CaseStudy {
   id: string;
-  icon: React.ReactNode;
-  iconBg: string;
-  iconBorder: string;
-  quote: string;
+  emoji: string;
+  emojiBg: string;
+  emojiBorder: string;
   company: string;
-  companyDescription: string;
-  details: string;
+  sector: string;
+  quote: string;
+  story: string;
   impactMetrics: ImpactMetric[];
-  accentColor: string;
-  accentBg: string;
-  accentBorder: string;
+  accentVar: string;
+  glowColor: string;
 }
 
 const caseStudies: CaseStudy[] = [
   {
-    id: "trailforge",
-    icon: <Package className="w-5 h-5 text-emerald-400" />,
-    iconBg: "bg-emerald-500/10",
-    iconBorder: "border-emerald-500/20",
+    id: "retailnest",
+    emoji: "🛍️",
+    emojiBg: "rgba(52,211,153,.12)",
+    emojiBorder: "rgba(52,211,153,.22)",
+    company: "RetailNest",
+    sector: "Fashion Retail Chain · 12 stores",
     quote:
-      '"AI-driven forecasting cut inventory waste by 40% for TrailForge"',
-    company: "TrailForge",
-    companyDescription: "Suitcase & Travel Gear Brand",
-    details:
-      "TrailForge, a suitcase brand, faced stock issues and inefficiencies. Our AI forecasting optimized inventory and production cycles, helping them save costs and deliver faster.",
+      "\u201CNeurolytix cut our inventory waste by 38% and eliminated weekly stockout crises.\u201D",
+    story:
+      "RetailNest was over-ordering slow SKUs while running out of bestsellers every weekend. Their team was managing inventory from weekly Excel reports with a 5-day lag. Neurolytix connected their POS, supplier, and warehouse data into a live demand forecasting system that now auto-flags reorder triggers 10 days in advance.",
     impactMetrics: [
-      { label: "Less Inventory Waste", value: "40%" },
-      { label: "Faster Production", value: "35%" },
-      { label: "More Accurate Forecasting", value: "20%" },
-      { label: "Faster Fulfillment", value: "25%" },
+      { label: "Less Inventory Waste", value: "38%", icon: "📉" },
+      { label: "Faster Reorder Decisions", value: "10×", icon: "⚡" },
+      { label: "Forecast Accuracy", value: "94%", icon: "🎯" },
+      { label: "Monthly Cost Saved", value: "₹6.2L", icon: "💸" },
     ],
-    accentColor: "text-emerald-400",
-    accentBg: "bg-emerald-500/10",
-    accentBorder: "border-emerald-500/20",
+    accentVar: "#34d399",
+    glowColor: "rgba(52,211,153,.09)",
   },
   {
-    id: "medixchain",
-    icon: <HeartPulse className="w-5 h-5 text-blue-400" />,
-    iconBg: "bg-blue-500/10",
-    iconBorder: "border-blue-500/20",
+    id: "swiftroute",
+    emoji: "🚚",
+    emojiBg: "rgba(34,211,238,.12)",
+    emojiBorder: "rgba(34,211,238,.22)",
+    company: "SwiftRoute Logistics",
+    sector: "Last-Mile Delivery · 8 city ops",
     quote:
-      '"AI-powered workflows reduced error rate by 80% in daily operations"',
-    company: "MedixChain",
-    companyDescription: "Healthcare Logistics",
-    details:
-      "MedixChain, a healthcare logistics company, was dealing with frequent data errors and delays. We introduced AI validation and live tracking to improve accuracy and speed across their supply chain.",
+      "\u201CDelivery delays dropped by 44% in the first 6 weeks after going live with Neurolytix.\u201D",
+    story:
+      "SwiftRoute was losing clients due to unpredictable delivery windows \u2014 their dispatch team had no visibility into route efficiency or driver performance until end-of-day. Neurolytix built a real-time operations intelligence layer that surfaces delay risks, optimal route suggestions, and capacity bottlenecks 2\u20133 hours before they become problems.",
     impactMetrics: [
-      { label: "Error Reduction", value: "80%" },
-      { label: "Accuracy in Data Logs", value: "90%" },
-      { label: "Faster Delivery", value: "30%" },
-      { label: "Hours Saved", value: "60+" },
+      { label: "Fewer Delivery Delays", value: "44%", icon: "🕐" },
+      { label: "Route Cost Reduction", value: "28%", icon: "🗺️" },
+      { label: "Earlier Risk Alerts", value: "3hrs", icon: "📦" },
+      { label: "Client Satisfaction Score", value: "4.8", icon: "⭐" },
     ],
-    accentColor: "text-blue-400",
-    accentBg: "bg-blue-500/10",
-    accentBorder: "border-blue-500/20",
+    accentVar: "#22d3ee",
+    glowColor: "rgba(34,211,238,.09)",
   },
   {
-    id: "finsolve",
-    icon: <DollarSign className="w-5 h-5 text-amber-400" />,
-    iconBg: "bg-amber-500/10",
-    iconBorder: "border-amber-500/20",
+    id: "kartco",
+    emoji: "🛒",
+    emojiBg: "rgba(251,146,60,.12)",
+    emojiBorder: "rgba(251,146,60,.22)",
+    company: "Kart&Co",
+    sector: "D2C E-commerce · 40K monthly orders",
     quote:
-      '"Automating 50% of operations saved 20% in costs within 2 months"',
-    company: "FinSolve",
-    companyDescription: "Financial Services",
-    details:
-      "FinSolve, a financial services firm, was overloaded with repetitive admin tasks. By automating internal workflows and integrating data systems, they streamlined operations and reduced overhead.",
+      "\u201CChurn dropped 31% after we finally understood which customers were about to leave \u2014 and why.\u201D",
+    story:
+      "Kart&Co had solid acquisition numbers but a leaky retention problem \u2014 customers were quietly churning and the team only found out on monthly review calls. Neurolytix built a churn prediction model on top of their order, support, and engagement data, triggering personalised retention campaigns 2 weeks before predicted churn events.",
     impactMetrics: [
-      { label: "Operations Automated", value: "50%" },
-      { label: "Cost Reduction", value: "20%" },
-      { label: "Hours Saved/Month", value: "70+" },
-      { label: "Faster Client Onboarding", value: "2x" },
+      { label: "Churn Reduction", value: "31%", icon: "🔁" },
+      { label: "Retention Campaign ROI", value: "2.4×", icon: "💰" },
+      { label: "Churn Model Accuracy", value: "89%", icon: "🧠" },
+      { label: "Customer LTV Growth", value: "+18%", icon: "📈" },
     ],
-    accentColor: "text-amber-400",
-    accentBg: "bg-amber-500/10",
-    accentBorder: "border-amber-500/20",
+    accentVar: "#fb923c",
+    glowColor: "rgba(251,146,60,.09)",
   },
   {
-    id: "scalebyte",
-    icon: <Rocket className="w-5 h-5 text-violet-400" />,
-    iconBg: "bg-violet-500/10",
-    iconBorder: "border-violet-500/20",
+    id: "opsgrid",
+    emoji: "💼",
+    emojiBg: "rgba(124,92,252,.14)",
+    emojiBorder: "rgba(124,92,252,.25)",
+    company: "OpsGrid",
+    sector: "Field Service Management · B2B SaaS",
     quote:
-      '"AI integration helped ScaleByte close 3x more deals in less time"',
-    company: "ScaleByte",
-    companyDescription: "SaaS Sales Platform",
-    details:
-      "ScaleByte's sales team struggled with follow-up delays. Our AI sales assistant automated outreach, lead scoring, and CRM updates—resulting in faster responses and more closed deals.",
+      "\u201CWe replaced 3 separate BI tools with one Neurolytix dashboard and finally have one source of truth.\u201D",
+    story:
+      "OpsGrid was juggling Tableau, Metabase, and a custom Google Data Studio setup \u2014 none of which talked to each other. Their ops managers were spending 6+ hours a week manually merging reports in Excel. Neurolytix consolidated all data sources into a single intelligence layer with auto-refreshing KPIs and anomaly alerts for SLA breaches.",
     impactMetrics: [
-      { label: "More Deals", value: "3x" },
-      { label: "Faster Responses", value: "40%" },
-      { label: "Lead Accuracy", value: "95%" },
-      { label: "CRM Fully Synced", value: "✓" },
+      { label: "Saved Per Manager/Week", value: "6hrs", icon: "⏱️" },
+      { label: "BI Tools Consolidated", value: "3→1", icon: "🔧" },
+      { label: "Fewer SLA Breaches", value: "52%", icon: "🚨" },
+      { label: "Decision Alerts", value: "Real-time", icon: "💡" },
     ],
-    accentColor: "text-violet-400",
-    accentBg: "bg-violet-500/10",
-    accentBorder: "border-violet-500/20",
+    accentVar: "#a78bfa",
+    glowColor: "rgba(124,92,252,.09)",
+  },
+  {
+    id: "forkline",
+    emoji: "🍽️",
+    emojiBg: "rgba(244,114,182,.12)",
+    emojiBorder: "rgba(244,114,182,.22)",
+    company: "ForkLine",
+    sector: "Cloud Kitchen Chain · 22 outlets",
+    quote:
+      "\u201CFood waste fell by 29% and our busiest outlets finally stopped running out of top menu items.\u201D",
+    story:
+      "ForkLine was managing 22 cloud kitchens with no centralised data on demand patterns, prep waste, or menu performance. Every outlet operated on gut feel. Neurolytix built a demand forecasting model using order history, weather data, and local event calendars \u2014 giving each kitchen manager a daily prep recommendation before service starts.",
+    impactMetrics: [
+      { label: "Food Waste Reduction", value: "29%", icon: "♻️" },
+      { label: "Prep Recommendations", value: "Daily", icon: "📋" },
+      { label: "Demand Forecast Accuracy", value: "91%", icon: "📊" },
+      { label: "Gross Margin Improvement", value: "+14%", icon: "💹" },
+    ],
+    accentVar: "#f472b6",
+    glowColor: "rgba(244,114,182,.09)",
   },
 ];
 
-/* ─────────────────────── Metric Icon Mapping ─────────────────────── */
-
-function getMetricIcon(label: string): React.ReactNode {
-  const lower = label.toLowerCase();
-  if (lower.includes("waste") || lower.includes("reduction") || lower.includes("error"))
-    return <TrendingDown className="w-3.5 h-3.5" />;
-  if (lower.includes("faster") || lower.includes("production") || lower.includes("speed"))
-    return <Zap className="w-3.5 h-3.5" />;
-  if (lower.includes("accuracy") || lower.includes("accurate") || lower.includes("lead"))
-    return <Target className="w-3.5 h-3.5" />;
-  if (lower.includes("hours") || lower.includes("time") || lower.includes("onboarding"))
-    return <Clock className="w-3.5 h-3.5" />;
-  if (lower.includes("deals") || lower.includes("growth") || lower.includes("more"))
-    return <TrendingUp className="w-3.5 h-3.5" />;
-  if (lower.includes("automated") || lower.includes("operations"))
-    return <BarChart3 className="w-3.5 h-3.5" />;
-  if (lower.includes("synced") || lower.includes("crm"))
-    return <CheckCircle2 className="w-3.5 h-3.5" />;
-  return <ArrowUpRight className="w-3.5 h-3.5" />;
-}
-
 /* ─────────────────────── Case Study Card ─────────────────────── */
 
-interface CaseStudyCardProps {
-  study: CaseStudy;
-  isActive: boolean;
-}
-
-function CaseStudyCard({ study, isActive }: CaseStudyCardProps) {
+function CaseStudyCard({ study, index }: { study: CaseStudy; index: number }) {
   return (
     <div
-      className={cn(
-        "group relative flex-shrink-0 w-[320px] sm:w-[380px] md:w-[420px] lg:w-[460px] rounded-2xl border bg-card p-5 sm:p-6 lg:p-7 transition-all duration-500 select-none overflow-hidden",
-        isActive
-          ? "border-primary/25 shadow-xl shadow-primary/10 scale-[1.02]"
-          : "border-border hover:border-primary/15 shadow-lg shadow-black/10 hover:shadow-primary/5"
-      )}
+      className="cs-card group"
+      style={
+        {
+          animationDelay: `${0.1 + index * 0.1}s`,
+        } as React.CSSProperties
+      }
     >
-      {/* Subtle background glow */}
+      {/* Accent glow overlay */}
       <div
-        className={cn(
-          "absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl transition-opacity duration-500 pointer-events-none",
-          isActive ? "opacity-100" : "opacity-0 group-hover:opacity-60",
-          study.accentBg
-        )}
-        style={{ filter: "blur(60px)" }}
+        className="cs-card-glow"
+        style={{
+          background: `radial-gradient(ellipse at 0% 0%, ${study.glowColor}, transparent 60%)`,
+        }}
         aria-hidden="true"
       />
 
-      {/* Top row: icon + company */}
-      <div className="relative z-10 flex items-center gap-3 mb-4">
+      {/* Company header */}
+      <div className="flex items-center gap-3 relative z-[1]">
         <div
-          className={cn(
-            "flex items-center justify-center w-10 h-10 rounded-xl border",
-            study.iconBg,
-            study.iconBorder
-          )}
+          className="cs-company-icon"
+          style={{
+            background: study.emojiBg,
+            border: `1px solid ${study.emojiBorder}`,
+          }}
         >
-          {study.icon}
+          {study.emoji}
         </div>
         <div>
-          <p className="text-sm font-semibold text-foreground">{study.company}</p>
-          <p className="text-[11px] text-muted-foreground">{study.companyDescription}</p>
+          <div className="cs-company-name">{study.company}</div>
+          <div className="cs-company-sector">{study.sector}</div>
         </div>
       </div>
 
-      {/* Quote */}
-      <blockquote className="relative z-10 text-base sm:text-lg font-semibold text-foreground leading-snug mb-3">
-        {study.quote}
-      </blockquote>
+      {/* Divider */}
+      <div className="cs-card-divider" />
 
-      {/* Description */}
-      <p className="relative z-10 text-sm text-muted-foreground leading-relaxed mb-5">
-        {study.details}
-      </p>
+      {/* Quote */}
+      <p className="cs-card-quote">{study.quote}</p>
+
+      {/* Story */}
+      <p className="cs-card-story">{study.story}</p>
 
       {/* Impact metrics */}
-      <div className="relative z-10">
-        <p
-          className={cn(
-            "text-xs font-semibold tracking-wider uppercase mb-3",
-            study.accentColor
-          )}
-        >
-          Impact :
-        </p>
-        <div className="grid grid-cols-2 gap-2">
+      <div className="relative z-[1]">
+        <div className="cs-impact-label" style={{ color: study.accentVar }}>
+          Impact
+        </div>
+        <div className="cs-impact-grid">
           {study.impactMetrics.map((metric, i) => (
-            <div
-              key={i}
-              className={cn(
-                "flex items-center gap-2 px-3 py-2.5 rounded-lg border transition-colors duration-200",
-                study.accentBg,
-                study.accentBorder,
-                "hover:brightness-110"
-              )}
-            >
-              <span className={cn(study.accentColor, "shrink-0")}>
-                {getMetricIcon(metric.label)}
-              </span>
+            <div key={i} className="cs-impact-chip">
+              <span className="cs-chip-icon">{metric.icon}</span>
               <div className="min-w-0">
-                <p className={cn("text-sm font-bold leading-tight", study.accentColor)}>
+                <div className="cs-chip-val" style={{ color: study.accentVar }}>
                   {metric.value}
-                </p>
-                <p className="text-[10px] text-muted-foreground leading-tight truncate">
-                  {metric.label}
-                </p>
+                </div>
+                <div className="cs-chip-lbl">{metric.label}</div>
               </div>
             </div>
           ))}
@@ -250,242 +203,444 @@ function CaseStudyCard({ study, isActive }: CaseStudyCardProps) {
 /* ─────────────────────── Main CaseStudies Section ─────────────────────── */
 
 export function CaseStudies() {
-  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = React.useState(0);
+  const trackRef = React.useRef<HTMLDivElement>(null);
+  const [current, setCurrent] = React.useState(0);
   const [isDragging, setIsDragging] = React.useState(false);
-  const [startX, setStartX] = React.useState(0);
-  const [scrollLeft, setScrollLeft] = React.useState(0);
-  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
-  const [canScrollRight, setCanScrollRight] = React.useState(true);
+  const startXRef = React.useRef(0);
+  const startTranslateRef = React.useRef(0);
+  const currentTranslateRef = React.useRef(0);
+  const total = caseStudies.length;
+  const GAP = 24;
 
-  const updateScrollState = React.useCallback(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
+  const getCardWidth = React.useCallback(() => {
+    const track = trackRef.current;
+    if (!track || !track.children[0]) return 380 + GAP;
+    return (
+      (track.children[0] as HTMLElement).getBoundingClientRect().width + GAP
+    );
+  }, []);
 
-    const { scrollLeft: sl, scrollWidth, clientWidth } = container;
-    setCanScrollLeft(sl > 10);
-    setCanScrollRight(sl < scrollWidth - clientWidth - 10);
+  const getTranslateFor = React.useCallback(
+    (index: number) => {
+      return -(index * getCardWidth());
+    },
+    [getCardWidth],
+  );
 
-    // Determine which card is closest to center
-    const containerCenter = sl + clientWidth / 2;
-    const cards = container.children;
-    let closestIndex = 0;
-    let closestDist = Infinity;
+  const goTo = React.useCallback(
+    (index: number) => {
+      const track = trackRef.current;
+      if (!track) return;
+      const clamped = Math.max(0, Math.min(index, total - 1));
+      const translate = getTranslateFor(clamped);
+      currentTranslateRef.current = translate;
+      track.style.transition = "transform .45s cubic-bezier(.25,.46,.45,.94)";
+      track.style.transform = `translateX(${translate}px)`;
+      setCurrent(clamped);
+    },
+    [total, getTranslateFor],
+  );
 
-    for (let i = 0; i < cards.length; i++) {
-      const card = cards[i] as HTMLElement;
-      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-      const dist = Math.abs(containerCenter - cardCenter);
-      if (dist < closestDist) {
-        closestDist = dist;
-        closestIndex = i;
-      }
-    }
-    setActiveIndex(closestIndex);
+  /* ── Mouse drag ── */
+  const handleMouseDown = React.useCallback((e: React.MouseEvent) => {
+    const track = trackRef.current;
+    if (!track) return;
+    setIsDragging(true);
+    startXRef.current = e.clientX;
+    startTranslateRef.current = currentTranslateRef.current;
+    track.style.transition = "none";
   }, []);
 
   React.useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    container.addEventListener("scroll", updateScrollState, { passive: true });
-    updateScrollState();
-
-    return () => {
-      container.removeEventListener("scroll", updateScrollState);
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging) return;
+      const track = trackRef.current;
+      if (!track) return;
+      const delta = e.clientX - startXRef.current;
+      track.style.transform = `translateX(${
+        startTranslateRef.current + delta
+      }px)`;
     };
-  }, [updateScrollState]);
 
-  // Mouse drag handlers
-  const handleMouseDown = (e: React.MouseEvent) => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    setIsDragging(true);
-    setStartX(e.pageX - container.offsetLeft);
-    setScrollLeft(container.scrollLeft);
-    container.style.cursor = "grabbing";
-    container.style.userSelect = "none";
-  };
+    const handleMouseUp = (e: MouseEvent) => {
+      if (!isDragging) return;
+      setIsDragging(false);
+      const delta = e.clientX - startXRef.current;
+      if (delta < -60) goTo(current + 1);
+      else if (delta > 60) goTo(current - 1);
+      else goTo(current);
+    };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    const x = e.pageX - container.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    container.scrollLeft = scrollLeft - walk;
-  };
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging, current, goTo]);
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
-    const container = scrollContainerRef.current;
-    if (container) {
-      container.style.cursor = "grab";
-      container.style.userSelect = "";
-    }
-  };
+  /* ── Touch drag ── */
+  const handleTouchStart = React.useCallback((e: React.TouchEvent) => {
+    const track = trackRef.current;
+    if (!track) return;
+    startXRef.current = e.touches[0].clientX;
+    startTranslateRef.current = currentTranslateRef.current;
+    track.style.transition = "none";
+  }, []);
 
-  // Touch drag handlers
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    setIsDragging(true);
-    setStartX(e.touches[0].pageX - container.offsetLeft);
-    setScrollLeft(container.scrollLeft);
-  };
+  const handleTouchMove = React.useCallback((e: React.TouchEvent) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const delta = e.touches[0].clientX - startXRef.current;
+    track.style.transform = `translateX(${
+      startTranslateRef.current + delta
+    }px)`;
+  }, []);
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return;
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    const x = e.touches[0].pageX - container.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    container.scrollLeft = scrollLeft - walk;
-  };
+  const handleTouchEnd = React.useCallback(
+    (e: React.TouchEvent) => {
+      const delta = e.changedTouches[0].clientX - startXRef.current;
+      if (delta < -50) goTo(current + 1);
+      else if (delta > 50) goTo(current - 1);
+      else goTo(current);
+    },
+    [current, goTo],
+  );
 
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-  };
-
-  // Button navigation
-  const scrollToDirection = (direction: "left" | "right") => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    const cardWidth = container.children[0]
-      ? (container.children[0] as HTMLElement).offsetWidth + 24
-      : 400;
-    const scrollAmount = direction === "left" ? -cardWidth : cardWidth;
-    container.scrollBy({ left: scrollAmount, behavior: "smooth" });
-  };
+  /* ── Keyboard ── */
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") goTo(current - 1);
+      if (e.key === "ArrowRight") goTo(current + 1);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [current, goTo]);
 
   return (
     <section
       id="case-studies"
-      className="relative py-20 sm:py-24 md:py-32 overflow-hidden"
+      className="relative py-20 sm:py-24 md:py-32 overflow-hidden z-[1]"
     >
-      {/* Background effect */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(109,59,255,0.06)_0%,transparent_70%)]" />
-      </div>
+      {/* Ambient orbs */}
+      <div
+        className="absolute rounded-full pointer-events-none"
+        style={{
+          width: 600,
+          height: 600,
+          top: -100,
+          left: -100,
+          background: "#7c5cfc",
+          filter: "blur(130px)",
+          opacity: 0.14,
+        }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute rounded-full pointer-events-none"
+        style={{
+          width: 400,
+          height: 400,
+          bottom: 0,
+          right: -60,
+          background: "#22d3ee",
+          filter: "blur(130px)",
+          opacity: 0.14,
+        }}
+        aria-hidden="true"
+      />
 
+      {/* Header */}
       <div className="relative px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          {/* Section Header */}
           <SectionHeading
             badge="Case Studies"
-            title="See How Smart AI Automation"
-            highlightedText="Transforms Businesses"
-            description="See how AI automation streamlines operations, boosts efficiency, and drives growth."
+            title="See How Decision Intelligence"
+            highlightedText="Transforms Real Businesses"
+            description="From retail stockouts to logistics delays — see how Neurolytix turns fragmented data into measurable outcomes for growing businesses."
           />
         </div>
       </div>
 
       {/* Carousel */}
-      <div className="relative mt-2">
-        {/* Left gradient fade */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 md:w-32 z-20 bg-gradient-to-r from-background to-transparent pointer-events-none" />
-        {/* Right gradient fade */}
-        <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 md:w-32 z-20 bg-gradient-to-l from-background to-transparent pointer-events-none" />
-
-        {/* Scrollable container */}
+      <div className="relative">
+        {/* Track wrapper */}
         <div
-          ref={scrollContainerRef}
           className={cn(
-            "flex gap-5 sm:gap-6 overflow-x-auto no-scrollbar px-6 sm:px-10 md:px-20 lg:px-32 py-4",
-            isDragging ? "cursor-grabbing" : "cursor-grab"
+            "overflow-hidden py-2 pb-6 select-none",
+            isDragging ? "cursor-grabbing" : "cursor-grab",
           )}
           onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          style={{
-            scrollSnapType: isDragging ? "none" : "x mandatory",
-          }}
         >
-          {caseStudies.map((study, index) => (
-            <div
-              key={study.id}
-              className="scroll-snap-align-center flex-shrink-0"
-              style={{ scrollSnapAlign: "center" }}
-            >
-              <CaseStudyCard study={study} isActive={index === activeIndex} />
-            </div>
-          ))}
+          {/* Track */}
+          <div
+            ref={trackRef}
+            className="cs-carousel-track"
+            style={{
+              gap: `${GAP}px`,
+              transition: "transform .45s cubic-bezier(.25,.46,.45,.94)",
+            }}
+          >
+            {caseStudies.map((study, index) => (
+              <CaseStudyCard key={study.id} study={study} index={index} />
+            ))}
+          </div>
         </div>
 
-        {/* Navigation controls */}
-        <div className="flex items-center justify-center gap-6 mt-8 px-4">
-          {/* Left arrow */}
+        {/* Navigation */}
+        <div className="flex items-center justify-center gap-5 mt-6">
+          {/* Prev button */}
           <button
-            onClick={() => scrollToDirection("left")}
-            disabled={!canScrollLeft}
-            className={cn(
-              "flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-200 cursor-pointer",
-              canScrollLeft
-                ? "border-border bg-surface hover:bg-surface-light hover:border-primary/30 text-foreground"
-                : "border-border/50 bg-surface/50 text-muted-foreground/30 cursor-not-allowed"
-            )}
-            aria-label="Scroll left"
+            onClick={() => goTo(current - 1)}
+            className="cs-nav-btn"
+            aria-label="Previous"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
 
-          {/* Dot indicators */}
+          {/* Dots */}
           <div className="flex items-center gap-2">
             {caseStudies.map((_, index) => (
               <button
                 key={index}
-                onClick={() => {
-                  const container = scrollContainerRef.current;
-                  if (!container || !container.children[index]) return;
-                  const card = container.children[index] as HTMLElement;
-                  const containerCenter = container.clientWidth / 2;
-                  const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-                  container.scrollTo({
-                    left: cardCenter - containerCenter,
-                    behavior: "smooth",
-                  });
-                }}
-                className={cn(
-                  "rounded-full transition-all duration-300 cursor-pointer",
-                  index === activeIndex
-                    ? "w-8 h-2.5 bg-primary"
-                    : "w-2.5 h-2.5 bg-muted-foreground/20 hover:bg-muted-foreground/40"
-                )}
+                onClick={() => goTo(index)}
+                className={cn("cs-dot", index === current && "cs-dot-active")}
                 aria-label={`Go to case study ${index + 1}`}
               />
             ))}
           </div>
 
-          {/* Right arrow */}
+          {/* Next button */}
           <button
-            onClick={() => scrollToDirection("right")}
-            disabled={!canScrollRight}
-            className={cn(
-              "flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-200 cursor-pointer",
-              canScrollRight
-                ? "border-border bg-surface hover:bg-surface-light hover:border-primary/30 text-foreground"
-                : "border-border/50 bg-surface/50 text-muted-foreground/30 cursor-not-allowed"
-            )}
-            aria-label="Scroll right"
+            onClick={() => goTo(current + 1)}
+            className="cs-nav-btn"
+            aria-label="Next"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
-
-        {/* Drag to explore hint */}
-        <div className="flex items-center justify-center gap-2 mt-5">
-          <GripHorizontal className="w-4 h-4 text-muted-foreground/40" />
-          <span className="text-xs text-muted-foreground/40 uppercase tracking-widest font-medium select-none">
-            Drag to explore
-          </span>
-          <GripHorizontal className="w-4 h-4 text-muted-foreground/40" />
-        </div>
       </div>
+
+      {/* ── Global scoped styles so child components receive them ── */}
+      <style jsx global>{`
+        /* ── Carousel Track ── */
+        .cs-carousel-track {
+          display: flex;
+          padding: 0 max(32px, calc((100vw - 1160px) / 2));
+          will-change: transform;
+        }
+
+        /* ── Card ── */
+        .cs-card {
+          flex: 0 0 380px;
+          background: #0f0f19;
+          border: 1px solid rgba(255, 255, 255, 0.07);
+          border-radius: 20px;
+          padding: 30px 30px 26px;
+          display: flex;
+          flex-direction: column;
+          gap: 18px;
+          transition:
+            border-color 0.3s ease,
+            transform 0.3s ease,
+            background 0.3s ease;
+          position: relative;
+          overflow: hidden;
+          opacity: 0;
+          animation: csFadeUp 0.6s ease both;
+        }
+
+        .cs-card:hover {
+          border-color: rgba(255, 255, 255, 0.13);
+          background: #131320;
+          transform: translateY(-4px);
+        }
+
+        /* ── Card glow overlay ── */
+        .cs-card-glow {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          transition: opacity 0.4s ease;
+          pointer-events: none;
+          border-radius: 20px;
+          z-index: 0;
+        }
+
+        .cs-card:hover .cs-card-glow {
+          opacity: 1;
+        }
+
+        /* ── Company header ── */
+        .cs-company-icon {
+          width: 42px;
+          height: 42px;
+          border-radius: 11px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          flex-shrink: 0;
+        }
+
+        .cs-company-name {
+          font-size: 15px;
+          font-weight: 700;
+          color: #f0f0ff;
+          line-height: 1.3;
+        }
+
+        .cs-company-sector {
+          font-size: 11.5px;
+          color: #828a9a;
+          margin-top: 2px;
+          font-weight: 300;
+        }
+
+        /* ── Divider ── */
+        .cs-card-divider {
+          height: 1px;
+          background: rgba(255, 255, 255, 0.07);
+          position: relative;
+          z-index: 1;
+        }
+
+        /* ── Quote ── */
+        .cs-card-quote {
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 1.45;
+          letter-spacing: -0.01em;
+          color: #f0f0ff;
+          position: relative;
+          z-index: 1;
+        }
+
+        /* ── Story ── */
+        .cs-card-story {
+          font-size: 13.5px;
+          color: #828a9a;
+          line-height: 1.75;
+          font-weight: 300;
+          flex: 1;
+          position: relative;
+          z-index: 1;
+        }
+
+        /* ── Impact ── */
+        .cs-impact-label {
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.13em;
+          text-transform: uppercase;
+          margin-bottom: 10px;
+        }
+
+        .cs-impact-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 8px;
+        }
+
+        .cs-impact-chip {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 9px 11px;
+          border-radius: 9px;
+          border: 1px solid rgba(255, 255, 255, 0.06);
+          background: rgba(255, 255, 255, 0.03);
+          transition: background 0.2s;
+        }
+
+        .cs-card:hover .cs-impact-chip {
+          background: rgba(255, 255, 255, 0.05);
+        }
+
+        .cs-chip-icon {
+          font-size: 13px;
+          flex-shrink: 0;
+        }
+
+        .cs-chip-val {
+          font-size: 16px;
+          font-weight: 800;
+          line-height: 1;
+        }
+
+        .cs-chip-lbl {
+          font-size: 10px;
+          color: #828a9a;
+          margin-top: 2px;
+          line-height: 1.3;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        /* ── Nav buttons ── */
+        .cs-nav-btn {
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          border: 1px solid rgba(255, 255, 255, 0.07);
+          background: #0f0f19;
+          color: #828a9a;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition:
+            border-color 0.25s,
+            background 0.25s,
+            color 0.25s,
+            transform 0.2s;
+          flex-shrink: 0;
+        }
+
+        .cs-nav-btn:hover {
+          border-color: rgba(124, 92, 252, 0.4);
+          background: rgba(124, 92, 252, 0.12);
+          color: #a78bfa;
+          transform: scale(1.08);
+        }
+
+        /* ── Dots ── */
+        .cs-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.18);
+          border: none;
+          padding: 0;
+          cursor: pointer;
+          transition:
+            width 0.35s ease,
+            background 0.35s ease,
+            box-shadow 0.35s ease;
+        }
+
+        .cs-dot-active {
+          width: 28px;
+          background: #a78bfa;
+          box-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
+        }
+
+        /* ── Entrance animation ── */
+        @keyframes csFadeUp {
+          from {
+            opacity: 0;
+            transform: translateY(16px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </section>
   );
 }

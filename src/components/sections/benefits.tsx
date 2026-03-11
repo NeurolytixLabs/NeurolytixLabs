@@ -3,186 +3,309 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { SectionHeading } from "@/components/ui/section-heading";
-import {
-  TrendingUp,
-  Users,
-  Clock,
-  DollarSign,
-  BarChart3,
-  Rocket,
-  ArrowUpRight,
-} from "lucide-react";
+
+/* ─────────────────────── Stats Data ─────────────────────── */
+
+interface Stat {
+  value: string;
+  label: string;
+  color: string;
+}
+
+const stats: Stat[] = [
+  {
+    value: "38%",
+    label: "Average reduction in\noperational waste",
+    color: "text-emerald-400",
+  },
+  {
+    value: "10×",
+    label: "Faster decisions vs\nmanual reporting",
+    color: "text-cyan-400",
+  },
+  {
+    value: "94%",
+    label: "Average ML model\naccuracy achieved",
+    color: "text-violet-400",
+  },
+  {
+    value: "6hrs",
+    label: "Saved per manager\nper week",
+    color: "text-orange-400",
+  },
+];
 
 /* ─────────────────────── Benefit Data ─────────────────────── */
 
 interface Benefit {
-  icon: React.ReactNode;
+  icon: string;
   title: string;
   description: string;
-  accentColor: string;
-  accentBg: string;
-  accentBorder: string;
-  accentGlow: string;
+  metric: string;
+  theme: {
+    iconBg: string;
+    iconBorder: string;
+    metricColor: string;
+    metricBorder: string;
+    metricBg: string;
+    accentBarFrom: string;
+    accentBarTo: string;
+    glowColor: string;
+  };
 }
 
 const benefits: Benefit[] = [
   {
-    icon: <TrendingUp className="w-5 h-5" />,
-    title: "Increased Productivity",
+    icon: "⚡",
+    title: "Decisions in Hours, Not Weeks",
     description:
-      "Gain actionable insights with AI-driven analytics to improve decision-making and strategy.",
-    accentColor: "text-emerald-400",
-    accentBg: "bg-emerald-500/10",
-    accentBorder: "border-emerald-500/20",
-    accentGlow: "rgba(52, 211, 153, 0.06)",
+      "Most businesses wait days for reports that are already outdated. Neurolytix delivers real-time intelligence so your team acts on what's happening now — not what happened last Monday.",
+    metric: "⏱ 10× faster time-to-decision",
+    theme: {
+      iconBg: "bg-violet-500/[0.14]",
+      iconBorder: "border-violet-500/25",
+      metricColor: "text-violet-400",
+      metricBorder: "border-violet-500/30",
+      metricBg: "bg-violet-500/10",
+      accentBarFrom: "from-violet-500",
+      accentBarTo: "to-violet-400",
+      glowColor: "rgba(124,92,252,0.07)",
+    },
   },
   {
-    icon: <Users className="w-5 h-5" />,
-    title: "Better Customer Experience",
+    icon: "🔗",
+    title: "All Your Data, One Intelligence Layer",
     description:
-      "Personalized AI interactions improve response times, customer engagement, and overall satisfaction.",
-    accentColor: "text-blue-400",
-    accentBg: "bg-blue-500/10",
-    accentBorder: "border-blue-500/20",
-    accentGlow: "rgba(96, 165, 250, 0.06)",
+      "CRM, ERP, spreadsheets, APIs — Neurolytix connects every source into a single, unified intelligence layer. No more switching between tools or reconciling conflicting numbers across five reports.",
+    metric: "🔄 Single source of truth",
+    theme: {
+      iconBg: "bg-cyan-500/[0.12]",
+      iconBorder: "border-cyan-500/[0.22]",
+      metricColor: "text-cyan-400",
+      metricBorder: "border-cyan-500/25",
+      metricBg: "bg-cyan-500/[0.08]",
+      accentBarFrom: "from-cyan-400",
+      accentBarTo: "to-cyan-500",
+      glowColor: "rgba(34,211,238,0.07)",
+    },
   },
   {
-    icon: <Clock className="w-5 h-5" />,
-    title: "24/7 Availability",
+    icon: "📉",
+    title: "Cut Costs Without Cutting Teams",
     description:
-      "AI-powered systems operate around the clock, ensuring seamless support and execution without downtime.",
-    accentColor: "text-violet-400",
-    accentBg: "bg-violet-500/10",
-    accentBorder: "border-violet-500/20",
-    accentGlow: "rgba(167, 139, 250, 0.06)",
+      "Eliminate inefficiencies before they become losses. From inventory overstock to delivery bottlenecks, Neurolytix surfaces cost-saving opportunities automatically — no analyst required to find them.",
+    metric: "💸 Avg. 28% cost reduction",
+    theme: {
+      iconBg: "bg-emerald-500/[0.12]",
+      iconBorder: "border-emerald-500/[0.22]",
+      metricColor: "text-emerald-400",
+      metricBorder: "border-emerald-500/25",
+      metricBg: "bg-emerald-500/[0.08]",
+      accentBarFrom: "from-emerald-400",
+      accentBarTo: "to-emerald-500",
+      glowColor: "rgba(52,211,153,0.07)",
+    },
   },
   {
-    icon: <DollarSign className="w-5 h-5" />,
-    title: "Cost Reduction",
+    icon: "🧠",
+    title: "ML That Works on Your Data, Not Demo Data",
     description:
-      "AI automation minimizes manual work, cuts operational costs, and optimizes resource allocation for better profitability.",
-    accentColor: "text-amber-400",
-    accentBg: "bg-amber-500/10",
-    accentBorder: "border-amber-500/20",
-    accentGlow: "rgba(251, 191, 36, 0.06)",
+      "Generic ML tools are trained on generic data. Neurolytix builds and trains models on your actual business data — your customers, your products, your seasonality. The predictions actually make sense.",
+    metric: "🎯 94% avg. forecast accuracy",
+    theme: {
+      iconBg: "bg-orange-500/[0.12]",
+      iconBorder: "border-orange-500/[0.22]",
+      metricColor: "text-orange-400",
+      metricBorder: "border-orange-500/25",
+      metricBg: "bg-orange-500/[0.08]",
+      accentBarFrom: "from-orange-400",
+      accentBarTo: "to-amber-400",
+      glowColor: "rgba(251,146,60,0.07)",
+    },
   },
   {
-    icon: <BarChart3 className="w-5 h-5" />,
-    title: "Data-Driven Insights",
+    icon: "📈",
+    title: "Grow Without Growing Your Data Team",
     description:
-      "Leverage AI to analyze vast data sets, identify trends, and make smarter, faster, and more accurate business decisions.",
-    accentColor: "text-cyan-400",
-    accentBg: "bg-cyan-500/10",
-    accentBorder: "border-cyan-500/20",
-    accentGlow: "rgba(34, 211, 238, 0.06)",
+      "Hiring a data scientist costs ₹12–20L/year. Neurolytix delivers the same analytical firepower at a fraction of the cost — and scales as your data volume grows without adding headcount.",
+    metric: "👥 No data team needed",
+    theme: {
+      iconBg: "bg-pink-500/[0.12]",
+      iconBorder: "border-pink-500/[0.22]",
+      metricColor: "text-pink-400",
+      metricBorder: "border-pink-500/25",
+      metricBg: "bg-pink-500/[0.08]",
+      accentBarFrom: "from-pink-400",
+      accentBarTo: "to-rose-400",
+      glowColor: "rgba(244,114,182,0.07)",
+    },
   },
   {
-    icon: <Rocket className="w-5 h-5" />,
-    title: "Scalability & Growth",
+    icon: "🛡️",
+    title: "Recommendations You Can Trust & Explain",
     description:
-      "AI adapts to your business needs, allowing you to scale efficiently without increasing workload or costs.",
-    accentColor: "text-pink-400",
-    accentBg: "bg-pink-500/10",
-    accentBorder: "border-pink-500/20",
-    accentGlow: "rgba(244, 114, 182, 0.06)",
+      "Every decision recommendation includes a confidence score and a plain-language explanation. No black-box outputs. Your managers understand why the system is recommending something before they act on it.",
+    metric: "✅ Explainable AI outputs",
+    theme: {
+      iconBg: "bg-amber-500/[0.12]",
+      iconBorder: "border-amber-500/[0.22]",
+      metricColor: "text-amber-400",
+      metricBorder: "border-amber-500/25",
+      metricBg: "bg-amber-500/[0.08]",
+      accentBarFrom: "from-amber-400",
+      accentBarTo: "to-yellow-500",
+      glowColor: "rgba(251,191,36,0.07)",
+    },
   },
 ];
 
-/* ─────────────────────── Benefit Card ─────────────────────── */
+/* ─────────────────────── Stat Cell ─────────────────────── */
 
-interface BenefitCardProps {
-  benefit: Benefit;
-  index: number;
+function StatCell({ stat }: { stat: Stat }) {
+  return (
+    <div className="group bg-card text-center py-7 px-6 transition-colors duration-300 hover:bg-[#131322]">
+      <div
+        className={cn(
+          "text-[38px] font-bold leading-none mb-1.5 tracking-tight",
+          stat.color,
+        )}
+        style={{ fontFamily: "var(--font-sans)" }}
+      >
+        {stat.value}
+      </div>
+      <div className="text-xs text-muted-foreground leading-snug whitespace-pre-line">
+        {stat.label}
+      </div>
+    </div>
+  );
 }
 
-function BenefitCard({ benefit, index }: BenefitCardProps) {
+/* ─────────────────────── Benefit Card ─────────────────────── */
+
+function BenefitCard({ benefit, index }: { benefit: Benefit; index: number }) {
   return (
     <div
       className={cn(
-        "group relative flex flex-col gap-4 rounded-2xl border border-border bg-card p-5 sm:p-6 lg:p-7",
+        "group relative flex flex-col gap-4 rounded-[20px] border border-border bg-card",
+        "p-7 sm:p-8",
         "transition-all duration-300 ease-out",
-        "hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5",
-        "hover:-translate-y-1",
-        "overflow-hidden"
+        "hover:border-white/[0.13] hover:-translate-y-1 hover:bg-[#131322]",
+        "overflow-hidden",
       )}
-      style={{
-        animationDelay: `${index * 80}ms`,
-      }}
+      style={{ animationDelay: `${index * 80}ms` }}
     >
-      {/* Hover glow effect */}
+      {/* Top accent bar on hover */}
       <div
-        className="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{ backgroundColor: benefit.accentGlow }}
+        className={cn(
+          "absolute top-0 left-0 right-0 h-[2px] rounded-t-[20px]",
+          "opacity-0 group-hover:opacity-100 transition-opacity duration-350 ease-out",
+          "bg-gradient-to-r",
+          benefit.theme.accentBarFrom,
+          benefit.theme.accentBarTo,
+        )}
         aria-hidden="true"
       />
 
-      {/* Subtle corner gradient accent on hover */}
+      {/* Radial glow on hover */}
       <div
-        className={cn(
-          "absolute top-0 right-0 w-24 h-24 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none",
-          "bg-[radial-gradient(circle_at_top_right,var(--glow-color)_0%,transparent_70%)]"
-        )}
-        style={
-          {
-            "--glow-color": benefit.accentGlow,
-          } as React.CSSProperties
-        }
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400 ease-out pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse at 10% 0%, ${benefit.theme.glowColor}, transparent 65%)`,
+        }}
         aria-hidden="true"
       />
 
       {/* Icon */}
-      <div className="relative z-10 flex items-center justify-between">
-        <div
-          className={cn(
-            "flex items-center justify-center w-11 h-11 rounded-xl border transition-all duration-300",
-            benefit.accentBg,
-            benefit.accentBorder,
-            benefit.accentColor,
-            "group-hover:scale-110 group-hover:shadow-md"
-          )}
-          style={{
-            boxShadow: "none",
-          }}
-        >
-          {benefit.icon}
-        </div>
-
-        {/* Arrow icon that appears on hover */}
-        <div
-          className={cn(
-            "flex items-center justify-center w-8 h-8 rounded-full border transition-all duration-300",
-            "opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0",
-            benefit.accentBorder,
-            benefit.accentColor
-          )}
-        >
-          <ArrowUpRight className="w-3.5 h-3.5" />
-        </div>
+      <div
+        className={cn(
+          "relative z-10 flex items-center justify-center w-[52px] h-[52px] rounded-[14px] border text-[22px] shrink-0",
+          benefit.theme.iconBg,
+          benefit.theme.iconBorder,
+        )}
+      >
+        {benefit.icon}
       </div>
 
-      {/* Title */}
-      <h3 className="relative z-10 text-lg sm:text-xl font-bold text-foreground leading-snug transition-colors duration-200 group-hover:text-foreground">
-        {benefit.title}
-      </h3>
+      {/* Card body */}
+      <div className="relative z-10">
+        <h3 className="text-lg font-bold text-foreground tracking-tight mb-2.5 leading-snug">
+          {benefit.title}
+        </h3>
+        <p className="text-sm text-muted-foreground leading-[1.8] font-light">
+          {benefit.description}
+        </p>
+      </div>
 
-      {/* Description */}
-      <p className="relative z-10 text-sm text-muted-foreground leading-relaxed">
-        {benefit.description}
-      </p>
+      {/* Metric pill */}
+      <div
+        className={cn(
+          "relative z-10 inline-flex items-center gap-1.5 w-fit",
+          "px-3 py-1.5 rounded-full text-[11px] font-semibold border mt-auto",
+          benefit.theme.metricColor,
+          benefit.theme.metricBorder,
+          benefit.theme.metricBg,
+        )}
+      >
+        {benefit.metric}
+      </div>
+    </div>
+  );
+}
 
-      {/* Bottom accent line that appears on hover */}
-      <div className="absolute bottom-0 left-0 right-0 h-[2px] overflow-hidden">
-        <div
+/* ─────────────────────── CTA Strip ─────────────────────── */
+
+function CTAStrip() {
+  return (
+    <div
+      className={cn(
+        "relative mt-14 rounded-[20px] border border-border bg-card overflow-hidden",
+        "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8",
+        "px-8 py-10 sm:px-12 sm:py-10",
+      )}
+    >
+      {/* Background glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at 0% 50%, rgba(109,59,255,0.08), transparent 60%)",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Text */}
+      <div className="relative z-10">
+        <h3 className="text-xl sm:text-2xl font-bold tracking-tight mb-2 leading-snug">
+          Ready to turn your data into a growth engine?
+        </h3>
+        <p className="text-sm text-muted-foreground font-light max-w-[420px] leading-relaxed">
+          Join early-access businesses already using Neurolytix to make faster,
+          smarter decisions — without building an internal data team.
+        </p>
+      </div>
+
+      {/* Buttons */}
+      <div className="relative z-10 flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto">
+        <button
           className={cn(
-            "h-full w-full transition-transform duration-500 ease-out origin-left scale-x-0 group-hover:scale-x-100",
-            benefit.accentColor === "text-emerald-400" && "bg-emerald-400/50",
-            benefit.accentColor === "text-blue-400" && "bg-blue-400/50",
-            benefit.accentColor === "text-violet-400" && "bg-violet-400/50",
-            benefit.accentColor === "text-amber-400" && "bg-amber-400/50",
-            benefit.accentColor === "text-cyan-400" && "bg-cyan-400/50",
-            benefit.accentColor === "text-pink-400" && "bg-pink-400/50"
+            "px-7 py-3.5 bg-primary rounded-[10px] text-white text-sm font-bold whitespace-nowrap",
+            "transition-all duration-250 ease-out",
+            "hover:bg-violet-400 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(124,92,252,0.35)]",
+            "cursor-pointer",
           )}
-        />
+        >
+          Request Early Access
+        </button>
+        <button
+          className={cn(
+            "px-7 py-3.5 bg-transparent border border-border rounded-[10px] text-muted-foreground text-sm font-semibold whitespace-nowrap",
+            "transition-all duration-250 ease-out",
+            "hover:border-white/20 hover:text-foreground hover:-translate-y-0.5",
+            "cursor-pointer",
+          )}
+        >
+          See Pricing →
+        </button>
       </div>
     </div>
   );
@@ -196,26 +319,46 @@ export function Benefits() {
       id="benefits"
       className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 lg:px-8"
     >
-      {/* Background gradient effect */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[700px] bg-[radial-gradient(ellipse_at_center,rgba(109,59,255,0.05)_0%,transparent_70%)]" />
+      {/* Ambient orbs */}
+      <div
+        className="absolute inset-0 pointer-events-none overflow-hidden"
+        aria-hidden="true"
+      >
+        <div className="absolute -top-0 -right-20 w-[500px] h-[500px] rounded-full bg-primary/[0.13] blur-[140px]" />
+        <div className="absolute bottom-16 -left-16 w-[400px] h-[400px] rounded-full bg-cyan-400/[0.13] blur-[140px]" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl">
+      <div className="relative mx-auto max-w-[1160px]">
         {/* Section Header */}
         <SectionHeading
-          badge="Benefits"
-          title="The Key Benefits of AI for Your"
-          highlightedText="Business Growth"
-          description="Discover how AI automation enhances efficiency, reduces costs, and drives business growth with smarter, faster processes."
+          badge="Why Neurolytix"
+          title="The Business Growth Engine"
+          highlightedText="Built Into Your Data"
+          description="Stop leaving decisions to intuition. Neurolytix gives growing businesses the same data intelligence advantage that Fortune 500 companies pay millions to build internally."
         />
 
+        {/* Stats Banner */}
+        <div
+          className={cn(
+            "grid grid-cols-2 lg:grid-cols-4 gap-px",
+            "bg-border border border-border rounded-[18px] overflow-hidden",
+            "mb-14",
+          )}
+        >
+          {stats.map((stat) => (
+            <StatCell key={stat.value} stat={stat} />
+          ))}
+        </div>
+
         {/* Benefits Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {benefits.map((benefit, index) => (
             <BenefitCard key={benefit.title} benefit={benefit} index={index} />
           ))}
         </div>
+
+        {/* CTA Strip */}
+        <CTAStrip />
       </div>
     </section>
   );
