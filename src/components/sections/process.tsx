@@ -831,7 +831,7 @@ function StepCard({ step, index }: { step: StepData; index: number }) {
       {/* Mockup — slide in from side + gentle float on hover */}
       <div
         className={cn(
-          "relative z-10 hidden md:block transition-all duration-700 group-hover:scale-[1.02]",
+          "relative z-10 block w-full transition-all duration-700 group-hover:scale-[1.02]",
           isEven && "md:order-1",
           inView
             ? "opacity-100 translate-x-0"
