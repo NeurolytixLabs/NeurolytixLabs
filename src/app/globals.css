@@ -148,6 +148,11 @@ video {
     will-change: transform;
 }
 
+.animate-marquee:hover,
+.animate-marquee-reverse:hover {
+    animation-play-state: paused;
+}
+
 /* ─────────────────── Fade-In-Up (initial load only) ─────────────────── */
 
 @keyframes fade-in-up {
