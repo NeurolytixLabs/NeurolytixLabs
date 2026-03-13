@@ -20,33 +20,51 @@ interface FAQItem {
 const faqItems: FAQItem[] = [
   {
     id: "faq-1",
-    question: "How can AI automation help my business?",
+    question: "What exactly does Neurolytix do?",
     answer:
-      "AI automation can streamline repetitive tasks, reduce human error, improve decision-making with data-driven insights, and free up your team to focus on high-value strategic work. Whether it's automating customer support, optimizing workflows, or generating reports, AI adapts to your specific business needs and drives measurable efficiency gains.",
+      "Neurolytix is a Decision Intelligence platform — we take your raw, fragmented business data and transform it into clear, actionable recommendations. That means we handle the full data lifecycle: ingesting data from your CRM, ERP, spreadsheets, and APIs; cleaning and structuring it; training ML models on it; and finally surfacing specific decisions your team should take — not just dashboards to stare at.",
   },
   {
     id: "faq-2",
-    question: "Is AI automation difficult to integrate?",
+    question: "How long does it take to go live?",
     answer:
-      "Not at all. Our team handles the entire integration process from start to finish. We assess your current tech stack, design a seamless implementation plan, and ensure minimal disruption to your existing operations. Most integrations are completed within 2–4 weeks, and we provide full onboarding support to get your team up to speed quickly.",
+      "Most clients have their first live dashboard within 5–7 business days and their first ML model deployed within 2–3 weeks. The timeline depends on how many data sources you're connecting and how clean your existing data is. Our team handles the entire setup — you don't need a data engineer or technical resource on your side to get started.",
   },
   {
     id: "faq-3",
-    question: "What industries can benefit from AI automation?",
+    question: "Do I need a data team or technical knowledge to use Neurolytix?",
     answer:
-      "AI automation is industry-agnostic and benefits virtually every sector. We've worked with businesses in finance, healthcare, e-commerce, logistics, SaaS, real estate, and more. Any organization that handles repetitive processes, large data volumes, or customer interactions can see significant improvements through AI-powered automation.",
+      "No. Neurolytix is built specifically for business operators, not data scientists. Your team interacts with a plain-language decision feed, KPI dashboards, and automated alerts — no SQL queries, no Python notebooks, no BI tool expertise required. We handle all the technical infrastructure on our end.",
   },
   {
     id: "faq-4",
-    question: "Do I need technical knowledge to use AI automation?",
+    question: "How is Neurolytix different from tools like Tableau or Power BI?",
     answer:
-      "No technical expertise is required. Our solutions are designed with user-friendly interfaces and intuitive dashboards that anyone on your team can operate. We also provide comprehensive training, documentation, and ongoing support to ensure you get the most out of your AI tools without needing a dedicated technical team.",
+      "Tableau and Power BI show you what happened. Neurolytix tells you what to do about it. Traditional BI tools are built for analysts to explore data. Neurolytix is built for operators to make decisions — every output includes a recommended action, a confidence score, and a plain-language explanation. We also handle data ingestion and ML model training, which BI tools don't touch.",
   },
   {
     id: "faq-5",
-    question: "What kind of support do you offer?",
+    question: "What data sources can Neurolytix connect to?",
     answer:
-      "We offer tiered support based on your plan. All customers receive email and chat support with dedicated response times. Professional plan users get priority support with faster resolution, while Enterprise clients enjoy 24/7 VIP support with a dedicated account manager and AI business consultant to ensure continuous optimization of your systems.",
+      "We support a wide range of sources including PostgreSQL, MySQL, MongoDB, Google Sheets, Excel, HubSpot, Salesforce, Shopify, WooCommerce, SAP exports, REST APIs, and CSV uploads. If you use a source that's not listed, reach out — we build custom connectors as part of the Enterprise onboarding process.",
+  },
+  {
+    id: "faq-6",
+    question: "Are the ML models generic or trained on my data?",
+    answer:
+      "They're trained on your data. Generic models built on public datasets produce generic results. Neurolytix trains every model — whether it's demand forecasting, churn prediction, or anomaly detection — on your historical business data, your customers, and your operational patterns. This is why our clients see 88–96% model accuracy rather than the 60–70% you'd get from off-the-shelf tools.",
+  },
+  {
+    id: "faq-7",
+    question: "How is my data kept secure?",
+    answer:
+      "All data is encrypted in transit (TLS 1.3) and at rest (AES-256). We operate on SOC 2 compliant infrastructure and follow strict data isolation practices — your data is never used to train models for other clients. We also support private cloud deployments and on-premise options for Enterprise clients with stricter data residency requirements.",
+  },
+  {
+    id: "faq-8",
+    question: "What happens after I sign up?",
+    answer:
+      "After signup, you'll be paired with an onboarding specialist within 24 hours. They'll run a data discovery call, map your sources, and begin pipeline setup. You'll receive weekly progress updates during onboarding. Once live, you'll have access to your dashboard, the decision feed, and our support team — with response times based on your plan tier.",
   },
 ];
 
@@ -58,7 +76,7 @@ export function FAQ() {
       id="faq"
       className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 lg:px-8"
     >
-      {/* Background gradient effect */}
+      {/* Background gradient */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[700px] bg-[radial-gradient(ellipse_at_center,rgba(109,59,255,0.05)_0%,transparent_70%)]" />
       </div>
@@ -69,7 +87,7 @@ export function FAQ() {
           badge="FAQs"
           title="We've Got the Answers You're"
           highlightedText="Looking For"
-          description="Quick answers to your AI automation questions."
+          description="Everything you need to know about getting started with Neurolytix."
         />
 
         {/* Accordion */}
