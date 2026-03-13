@@ -252,65 +252,6 @@ function BenefitCard({ benefit, index }: { benefit: Benefit; index: number }) {
   );
 }
 
-/* ─────────────────────── CTA Strip ─────────────────────── */
-
-function CTAStrip() {
-  return (
-    <div
-      className={cn(
-        "relative mt-14 rounded-[20px] border border-border bg-card overflow-hidden",
-        "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8",
-        "px-8 py-10 sm:px-12 sm:py-10",
-      )}
-    >
-      {/* Background glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 0% 50%, rgba(109,59,255,0.08), transparent 60%)",
-        }}
-        aria-hidden="true"
-      />
-
-      {/* Text */}
-      <div className="relative z-10">
-        <h3 className="text-xl sm:text-2xl font-bold tracking-tight mb-2 leading-snug">
-          Ready to turn your data into a growth engine?
-        </h3>
-        <p className="text-sm text-muted-foreground font-light max-w-[420px] leading-relaxed">
-          Join early-access businesses already using Neurolytix to make faster,
-          smarter decisions — without building an internal data team.
-        </p>
-      </div>
-
-      {/* Buttons */}
-      <div className="relative z-10 flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto">
-        <button
-          className={cn(
-            "px-7 py-3.5 bg-primary rounded-[10px] text-white text-sm font-bold whitespace-nowrap",
-            "transition-all duration-250 ease-out",
-            "hover:bg-violet-400 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(124,92,252,0.35)]",
-            "cursor-pointer",
-          )}
-        >
-          Request Early Access
-        </button>
-        <button
-          className={cn(
-            "px-7 py-3.5 bg-transparent border border-border rounded-[10px] text-muted-foreground text-sm font-semibold whitespace-nowrap",
-            "transition-all duration-250 ease-out",
-            "hover:border-white/20 hover:text-foreground hover:-translate-y-0.5",
-            "cursor-pointer",
-          )}
-        >
-          See Pricing →
-        </button>
-      </div>
-    </div>
-  );
-}
-
 /* ─────────────────────── Main Benefits Section ─────────────────────── */
 
 export function Benefits() {
@@ -356,9 +297,6 @@ export function Benefits() {
             <BenefitCard key={benefit.title} benefit={benefit} index={index} />
           ))}
         </div>
-
-        {/* CTA Strip */}
-        <CTAStrip />
       </div>
     </section>
   );
