@@ -306,45 +306,6 @@ function MarqueeRow({ items, reverse = false, duration = 38 }: MarqueeRowProps) 
   );
 }
 
-/* ─────────────────────── Trust Bar ─────────────────────── */
-
-const trustItems = [
-  { icon: "⭐", strong: "4.9 / 5", text: "average rating" },
-  { icon: "🏢", strong: "50+", text: "businesses onboarded" },
-  { icon: "🌍", strong: "Retail, Logistics & SaaS", text: "industries served" },
-  { icon: "🔒", strong: "SOC 2", text: "compliant infrastructure" },
-];
-
-function TrustBar() {
-  return (
-    <div className="mx-auto max-w-[1160px] px-4 sm:px-6 lg:px-8 mt-14">
-      <div
-        className={cn(
-          "flex flex-wrap items-center justify-around gap-6",
-          "rounded-2xl border border-border bg-card px-8 py-6",
-        )}
-      >
-        {trustItems.map((item, i) => (
-          <React.Fragment key={item.strong}>
-            <div className="flex items-center gap-2.5 text-sm text-muted-foreground">
-              <span className="text-lg">{item.icon}</span>
-              <span>
-                <strong className="text-foreground font-semibold">
-                  {item.strong}
-                </strong>{" "}
-                {item.text}
-              </span>
-            </div>
-            {i < trustItems.length - 1 && (
-              <div className="hidden sm:block w-px h-8 bg-border" />
-            )}
-          </React.Fragment>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 /* ─────────────────────── Main Testimonials Section ─────────────────────── */
 
 export function Testimonials() {
@@ -380,9 +341,6 @@ export function Testimonials() {
           <MarqueeRow items={row2} reverse duration={42} />
         </div>
       </div>
-
-      {/* Trust bar */}
-      <TrustBar />
     </section>
   );
 }
