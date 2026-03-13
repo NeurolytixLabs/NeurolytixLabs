@@ -9,6 +9,7 @@ import { Testimonials } from "@/components/sections/testimonials";
 import { FAQ } from "@/components/sections/faq";
 import { CTABanner } from "@/components/sections/cta-banner";
 import { Footer } from "@/components/sections/footer";
+import { Contact } from "@/components/sections/contact"
 import {
   ScrollReveal,
   RevealFromBottom,
@@ -127,6 +128,9 @@ export default function Home() {
           blur={4}
         >
           <CTABanner />
+        </ScrollReveal>
+        <ScrollReveal direction="up" duration={800} distance={40} threshold={0.08}>
+          <Contact />
         </ScrollReveal>
       </main>
 
