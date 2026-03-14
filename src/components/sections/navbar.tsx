@@ -73,6 +73,19 @@ export function Navbar() {
     setIsMobileMenuOpen(false);
   };
 
+  const scrollToContact = React.useCallback(() => {
+    const el = document.querySelector("#contact");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, []);
+
+  const handleContactClick = (event?: React.MouseEvent) => {
+    event?.preventDefault();
+    scrollToContact();
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <>
       <div
@@ -119,7 +132,9 @@ export function Navbar() {
 
                 {/* Desktop CTA */}
                 <div className="hidden lg:flex items-center gap-3">
-                  <GlowButton>Schedule a Free Call</GlowButton>
+                  <GlowButton onClick={handleContactClick}>
+                    Schedule a Free Call
+                  </GlowButton>
                 </div>
 
                 {/* Mobile Menu Toggle */}
@@ -216,10 +231,7 @@ export function Navbar() {
 
           {/* Mobile Menu Footer CTAs */}
           <div className="p-5 border-t border-border space-y-3">
-            <GlowButton
-              className="w-full"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
+            <GlowButton className="w-full" onClick={handleContactClick}>
               Schedule a Free Call
             </GlowButton>
           </div>
